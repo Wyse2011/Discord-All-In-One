@@ -3,31 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Markdown Editor</title>
-<link href="https://fonts.googleapis.com/css2?family=gg+sans:wght@400;500;600&family=Fira+Code:wght@400;500&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Discord All in One — D1</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* Shared brand tokens */
   :root {
+    --brand: #5865f2;
+    --brand-hover: #4752c4;
+    --green: #23a55a;
+    --red: #f23f43;
+    --yellow: #f0b232;
+    --text-link: #00aff4;
+    --nitro-grad: linear-gradient(135deg, #ff73fa, #5865f2);
+  }
+  /* ── Dark (default) ── */
+  body, body[data-theme="dark"] {
     --bg-primary: #1e1f22;
     --bg-secondary: #2b2d31;
     --bg-tertiary: #313338;
     --bg-modifier: #232428;
     --surface: #383a40;
     --surface-hover: #404249;
-    --brand: #5865f2;
-    --brand-hover: #4752c4;
-    --brand-active: #3c45a5;
-    --green: #23a55a;
-    --red: #f23f43;
-    --yellow: #f0b232;
     --text-normal: #dbdee1;
     --text-muted: #80848e;
-    --text-link: #00aff4;
     --header-primary: #f2f3f5;
     --interactive-normal: #b5bac1;
     --border: #3f4147;
-    --nitro-grad: linear-gradient(135deg, #ff73fa, #5865f2);
     --scrollbar: #1a1b1e;
     --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --canvas-bg: #0d1117;
+    --canvas-text: #cdd9e5;
+  }
+  /* ── Ash ── */
+  body[data-theme="ash"] {
+    --bg-primary: #31343a;
+    --bg-secondary: #2a2d31;
+    --bg-tertiary: #35373c;
+    --bg-modifier: #26282c;
+    --surface: #3e4147;
+    --surface-hover: #46494f;
+    --text-normal: #d1d4d7;
+    --text-muted: #8a8e94;
+    --header-primary: #f0f2f4;
+    --interactive-normal: #b3b8bf;
+    --border: #42454b;
+    --scrollbar: #1f2124;
+    --shadow: 0 4px 24px rgba(0,0,0,0.45);
+    --canvas-bg: #1e2124;
+    --canvas-text: #d1d4d7;
+  }
+  /* ── Onyx ── */
+  body[data-theme="onyx"] {
+    --bg-primary: #111214;
+    --bg-secondary: #1a1b1e;
+    --bg-tertiary: #1e1f22;
+    --bg-modifier: #131416;
+    --surface: #2a2b2e;
+    --surface-hover: #313235;
+    --text-normal: #d4d7db;
+    --text-muted: #6e7278;
+    --header-primary: #f2f3f5;
+    --interactive-normal: #a8adb4;
+    --border: #2e2f33;
+    --scrollbar: #0d0e0f;
+    --shadow: 0 4px 28px rgba(0,0,0,0.6);
+    --canvas-bg: #080909;
+    --canvas-text: #c8ccd0;
+  }
+  /* ── Midnight (AMOLED) ── */
+  body[data-theme="midnight"] {
+    --bg-primary: #000000;
+    --bg-secondary: #0d0d0d;
+    --bg-tertiary: #121212;
+    --bg-modifier: #080808;
+    --surface: #1c1c1c;
+    --surface-hover: #242424;
+    --text-normal: #d0d3d6;
+    --text-muted: #666a70;
+    --header-primary: #f2f3f5;
+    --interactive-normal: #9fa5ad;
+    --border: #1e1e1e;
+    --scrollbar: #000000;
+    --shadow: 0 4px 32px rgba(0,0,0,0.8);
+    --canvas-bg: #000000;
+    --canvas-text: #c8ccd0;
+  }
+  /* ── Light ── */
+  body[data-theme="light"] {
+    --bg-primary: #f2f3f5;
+    --bg-secondary: #e3e5e8;
+    --bg-tertiary: #ebedef;
+    --bg-modifier: #dde0e3;
+    --surface: #d4d7dc;
+    --surface-hover: #c8ccd2;
+    --text-normal: #2e3338;
+    --text-muted: #5c6370;
+    --header-primary: #060607;
+    --interactive-normal: #4f5660;
+    --border: #c7ccd2;
+    --scrollbar: #d4d7dc;
+    --shadow: 0 2px 12px rgba(0,0,0,0.12);
+    --canvas-bg: #ffffff;
+    --canvas-text: #2e3338;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,20 +113,19 @@
     font-family: 'Chakra Petch', monospace;
     background: var(--bg-primary);
     color: var(--text-normal);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
-  /* === TOP BAR === */
+  /* ===== TOP BAR ===== */
   #topbar {
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border);
     padding: 10px 16px 0;
     display: flex;
     flex-direction: column;
-    gap: 0;
     flex-shrink: 0;
     box-shadow: var(--shadow);
   }
@@ -57,100 +133,39 @@
   #topbar-row1 {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     padding-bottom: 10px;
     flex-wrap: wrap;
   }
 
-  .app-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-right: 8px;
-  }
+  .app-logo { display: flex; align-items: center; gap: 8px; margin-right: 4px; }
+  .app-logo svg { width: 26px; height: 26px; }
+  .app-title { font-size: 14px; font-weight: 700; color: var(--header-primary); letter-spacing: 0.05em; text-transform: uppercase; }
 
-  .app-logo svg { width: 28px; height: 28px; }
+  .divider-v { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; }
 
-  .app-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--header-primary);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .divider-v {
-    width: 1px;
-    height: 24px;
-    background: var(--border);
-    flex-shrink: 0;
-  }
-
-  /* Toolbar groups */
   .toolbar-group {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    background: var(--bg-modifier);
-    border-radius: 6px;
-    padding: 3px;
-    border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 2px;
+    background: var(--bg-modifier); border-radius: 6px;
+    padding: 3px; border: 1px solid var(--border);
   }
-
-  .toolbar-group .group-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    padding: 0 4px;
-    font-weight: 600;
-  }
+  .toolbar-group .group-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); padding: 0 4px; font-weight: 600; }
 
   .btn {
-    background: none;
-    border: none;
-    color: var(--interactive-normal);
-    cursor: pointer;
-    padding: 5px 8px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-family: 'Chakra Petch', monospace;
-    font-weight: 500;
+    background: none; border: none; color: var(--interactive-normal);
+    cursor: pointer; padding: 5px 8px; border-radius: 4px;
+    font-size: 13px; font-family: 'Chakra Petch', monospace; font-weight: 500;
     transition: background 0.12s, color 0.12s;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-    min-width: 28px;
-    justify-content: center;
-    position: relative;
+    display: flex; align-items: center; gap: 4px;
+    white-space: nowrap; min-width: 28px; justify-content: center; position: relative;
   }
-  .btn:hover {
-    background: var(--surface-hover);
-    color: var(--header-primary);
-  }
-  .btn:active {
-    background: var(--brand);
-    color: #fff;
-  }
-  .btn.active {
-    background: var(--brand);
-    color: #fff;
-  }
+  .btn:hover { background: var(--surface-hover); color: var(--header-primary); }
+  .btn:active { background: var(--brand); color: #fff; }
   .btn[title]:hover::after {
-    content: attr(title);
-    position: absolute;
-    bottom: -28px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #111;
-    color: #fff;
-    font-size: 11px;
-    padding: 3px 7px;
-    border-radius: 4px;
-    white-space: nowrap;
-    z-index: 999;
-    pointer-events: none;
+    content: attr(title); position: absolute; bottom: -26px; left: 50%;
+    transform: translateX(-50%); background: #111; color: #fff;
+    font-size: 11px; padding: 3px 7px; border-radius: 4px;
+    white-space: nowrap; z-index: 9999; pointer-events: none;
   }
   .btn.italic-btn { font-style: italic; }
   .btn.bold-btn { font-weight: 700; }
@@ -158,390 +173,315 @@
   .btn.strike-btn { text-decoration: line-through; }
   .btn.code-btn { font-family: 'Fira Code', monospace; font-size: 11px; }
 
-  /* Plan selector row */
   #plan-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 0 10px;
-    border-top: 1px solid var(--border);
-    margin-top: 2px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 0 9px; border-top: 1px solid var(--border); margin-top: 2px;
   }
-
-  .plan-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    font-weight: 600;
-  }
-
+  .plan-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
   .plan-btn {
-    background: var(--bg-modifier);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 4px 14px;
-    font-size: 12px;
-    font-family: 'Chakra Petch', monospace;
-    font-weight: 600;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.15s;
-    letter-spacing: 0.04em;
+    background: var(--bg-modifier); border: 1px solid var(--border); border-radius: 20px;
+    padding: 4px 14px; font-size: 12px; font-family: 'Chakra Petch', monospace;
+    font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.15s; letter-spacing: 0.04em;
   }
   .plan-btn:hover { border-color: var(--brand); color: var(--text-normal); }
-  .plan-btn.selected-standard {
-    background: var(--brand);
-    border-color: var(--brand);
-    color: #fff;
-  }
-  .plan-btn.selected-nitro {
-    background: transparent;
-    border: 1.5px solid transparent;
-    background-clip: padding-box;
-    position: relative;
-    color: #fff;
-  }
-  .plan-btn.selected-nitro::before {
-    content: '';
-    position: absolute;
-    inset: -1.5px;
-    border-radius: 21px;
-    background: var(--nitro-grad);
-    z-index: -1;
-  }
-
-  .char-counter {
-    margin-left: auto;
-    font-size: 12px;
-    color: var(--text-muted);
-    font-family: 'Fira Code', monospace;
-  }
+  .plan-btn.selected-standard { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .plan-btn.selected-nitro { background: transparent; border: 1.5px solid transparent; background-clip: padding-box; position: relative; color: #fff; }
+  .plan-btn.selected-nitro::before { content: ''; position: absolute; inset: -1.5px; border-radius: 21px; background: var(--nitro-grad); z-index: -1; }
+  .char-counter { margin-left: auto; font-size: 12px; color: var(--text-muted); font-family: 'Fira Code', monospace; }
   .char-counter .count { color: var(--text-normal); font-weight: 600; }
   .char-counter .over { color: var(--red); }
-  .char-counter .limit-label { color: var(--text-muted); }
 
-  /* === MAIN PANELS === */
-  #panels {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    flex: 1;
-    overflow: hidden;
-    gap: 0;
-  }
+  /* ===== LAYOUT ===== */
+  #main-layout { display: flex; flex: 1; overflow: hidden; flex-direction: column; }
 
-  .panel {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border-right: 1px solid var(--border);
-  }
+  #top-panels { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; min-height: 0; }
+
+  .panel { display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--border); }
   .panel:last-child { border-right: none; }
-
   .panel-header {
-    background: var(--bg-modifier);
-    padding: 8px 16px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
+    background: var(--bg-modifier); padding: 7px 14px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted);
     border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
+    display: flex; align-items: center; gap: 8px; flex-shrink: 0;
   }
-  .panel-header .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+  .panel-header .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .dot-edit { background: var(--yellow); }
   .dot-preview { background: var(--green); }
   .dot-output { background: var(--brand); }
+  .dot-color { background: #d33682; }
 
-  /* Editor */
   #editor {
-    flex: 1;
-    background: var(--bg-tertiary);
-    border: none;
-    outline: none;
-    resize: none;
-    color: var(--text-normal);
-    font-family: 'Fira Code', monospace;
-    font-size: 14px;
-    line-height: 1.6;
-    padding: 16px;
-    caret-color: var(--brand);
-    overflow-y: auto;
+    flex: 1; background: var(--bg-tertiary); border: none; outline: none;
+    resize: none; color: var(--text-normal); font-family: 'Fira Code', monospace;
+    font-size: 14px; line-height: 1.6; padding: 16px; caret-color: var(--brand); overflow-y: auto;
   }
   #editor::placeholder { color: var(--text-muted); }
   #editor::-webkit-scrollbar { width: 8px; }
   #editor::-webkit-scrollbar-track { background: var(--scrollbar); }
   #editor::-webkit-scrollbar-thumb { background: var(--surface); border-radius: 4px; }
 
-  /* Preview (Discord rendering) */
   #preview-panel {
-    background: var(--bg-tertiary);
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
+    background: var(--bg-tertiary); flex: 1; overflow-y: auto; padding: 16px;
     font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    line-height: 1.375;
-    color: var(--text-normal);
+    font-size: 15px; line-height: 1.375; color: var(--text-normal);
   }
   #preview-panel::-webkit-scrollbar { width: 8px; }
   #preview-panel::-webkit-scrollbar-track { background: var(--scrollbar); }
   #preview-panel::-webkit-scrollbar-thumb { background: var(--surface); border-radius: 4px; }
-
-  /* Discord markdown preview styles */
   #preview-panel strong { font-weight: 700; color: var(--header-primary); }
   #preview-panel em { font-style: italic; }
   #preview-panel u { text-decoration: underline; }
   #preview-panel s { text-decoration: line-through; }
-  #preview-panel .spoiler {
-    background: var(--surface);
-    color: transparent;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: all 0.2s;
-    padding: 0 2px;
-  }
-  #preview-panel .spoiler.revealed {
-    color: var(--text-normal);
-    background: var(--surface-hover);
-  }
-  #preview-panel h1 {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--header-primary);
-    margin: 8px 0 4px;
-    line-height: 1.2;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 4px;
-  }
-  #preview-panel h2 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--header-primary);
-    margin: 8px 0 4px;
-    line-height: 1.2;
-  }
-  #preview-panel h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--header-primary);
-    margin: 8px 0 4px;
-    line-height: 1.2;
-  }
-  #preview-panel .subtext {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin: 2px 0;
-  }
-  #preview-panel blockquote {
-    border-left: 4px solid var(--interactive-normal);
-    padding-left: 12px;
-    margin: 4px 0;
-    color: var(--text-muted);
-  }
-  #preview-panel code {
-    background: var(--bg-secondary);
-    padding: 0 4px;
-    border-radius: 3px;
-    font-family: 'Fira Code', monospace;
-    font-size: 13px;
-    color: #e3e5e8;
-  }
-  #preview-panel pre {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 10px 14px;
-    margin: 6px 0;
-    overflow-x: auto;
-    font-family: 'Fira Code', monospace;
-    font-size: 13px;
-    color: #e3e5e8;
-    white-space: pre;
-  }
+  #preview-panel .spoiler { background: var(--surface); color: transparent; border-radius: 3px; cursor: pointer; transition: all 0.2s; padding: 0 2px; }
+  #preview-panel .spoiler.revealed { color: var(--text-normal); background: var(--surface-hover); }
+  #preview-panel h1 { font-size: 24px; font-weight: 700; color: var(--header-primary); margin: 8px 0 4px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+  #preview-panel h2 { font-size: 20px; font-weight: 700; color: var(--header-primary); margin: 8px 0 4px; }
+  #preview-panel h3 { font-size: 16px; font-weight: 700; color: var(--header-primary); margin: 8px 0 4px; }
+  #preview-panel .subtext { font-size: 12px; color: var(--text-muted); margin: 2px 0; }
+  #preview-panel blockquote { border-left: 4px solid var(--interactive-normal); padding-left: 12px; margin: 4px 0; color: var(--text-muted); }
+  #preview-panel code { background: var(--bg-secondary); padding: 0 4px; border-radius: 3px; font-family: 'Fira Code', monospace; font-size: 13px; color: #e3e5e8; }
+  #preview-panel pre { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 10px 14px; margin: 6px 0; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 13px; color: #e3e5e8; white-space: pre; }
   #preview-panel pre code { background: none; padding: 0; }
-  #preview-panel ul, #preview-panel ol {
-    padding-left: 24px;
-    margin: 4px 0;
-  }
+  #preview-panel ul, #preview-panel ol { padding-left: 24px; margin: 4px 0; }
   #preview-panel li { margin: 2px 0; }
   #preview-panel a { color: var(--text-link); text-decoration: none; }
   #preview-panel a:hover { text-decoration: underline; }
   #preview-panel p { margin: 2px 0; min-height: 1.375em; }
 
-  /* === OUTPUT PANEL === */
-  #output-wrapper {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border-top: 1px solid var(--border);
+  /* ===== BOTTOM SECTION ===== */
+  #bottom-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 2px solid var(--border);
     flex-shrink: 0;
-    max-height: 220px;
+    height: 240px;
   }
 
-  #output-header {
+  /* ===== ANSI COLOR EDITOR ===== */
+  #color-panel { display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--border); background: var(--bg-secondary); }
+
+  #color-toolbar {
+    padding: 6px 10px 7px;
     background: var(--bg-modifier);
-    padding: 8px 16px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
     border-bottom: 1px solid var(--border);
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    gap: 5px;
     flex-shrink: 0;
   }
 
+  .color-row { display: flex; align-items: center; gap: 5px; }
+  .color-row-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); width: 20px; flex-shrink: 0; }
+
+  .color-swatch {
+    width: 20px; height: 20px; border-radius: 4px; border: 2px solid transparent;
+    cursor: pointer; flex-shrink: 0; transition: transform 0.1s, border-color 0.1s, box-shadow 0.1s;
+    position: relative;
+  }
+  .color-swatch:hover { transform: scale(1.2); border-color: rgba(255,255,255,0.5); }
+  .color-swatch.active-color { border-color: #ffffff !important; box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 0 6px rgba(255,255,255,0.2); transform: scale(1.15); }
+  .color-swatch[title]:hover::after {
+    content: attr(title); position: absolute; top: -28px; left: 50%;
+    transform: translateX(-50%); background: #111; color: #fff;
+    font-size: 10px; padding: 2px 6px; border-radius: 3px;
+    white-space: nowrap; z-index: 9999; pointer-events: none;
+  }
+
+  .color-divider { width: 1px; height: 16px; background: var(--border); margin: 0 1px; }
+
+  .apply-btn {
+    border: none; border-radius: 4px; font-family: 'Chakra Petch', monospace;
+    font-size: 10px; font-weight: 700; padding: 3px 9px; cursor: pointer;
+    letter-spacing: 0.04em; transition: opacity 0.1s; white-space: nowrap; color: #fff;
+  }
+  .apply-btn:hover { opacity: 0.85; }
+  .apply-btn.apply-fg { background: linear-gradient(135deg, #268bd2, #2aa198); }
+  .apply-btn.apply-bg { background: linear-gradient(135deg, #6c71c4, #d33682); }
+  .apply-btn.clear-btn { background: var(--surface); color: var(--interactive-normal); border: 1px solid var(--border); }
+  .apply-btn.clear-btn:hover { background: var(--surface-hover); color: var(--header-primary); }
+
+  .sel-preview {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 5px;
+    font-size: 10px; color: var(--text-muted); font-family: 'Fira Code', monospace;
+  }
+  .sel-dot { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.2); flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; }
+
+  /* Editable color canvas */
+  #color-canvas {
+    flex: 1; background: var(--canvas-bg); border: none; outline: none;
+    color: var(--canvas-text); font-family: 'Fira Code', monospace;
+    font-size: 13px; line-height: 1.65; padding: 10px 14px;
+    overflow-y: auto; white-space: pre-wrap; word-break: break-word;
+    cursor: text; min-height: 0;
+  }
+  #color-canvas:empty::before {
+    content: 'Type here, then highlight text and click FG/BG color + Apply...';
+    color: #4f545c; pointer-events: none;
+  }
+  #color-canvas::-webkit-scrollbar { width: 6px; }
+  #color-canvas::-webkit-scrollbar-track { background: var(--scrollbar); }
+  #color-canvas::-webkit-scrollbar-thumb { background: var(--surface); border-radius: 4px; }
+
+  #color-output-row {
+    padding: 6px 10px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg-tertiary); flex-shrink: 0;
+  }
+  #color-copy-btn {
+    background: var(--brand); border: none; color: #fff;
+    font-family: 'Chakra Petch', monospace; font-size: 11px; font-weight: 700;
+    padding: 5px 13px; border-radius: 5px; cursor: pointer;
+    letter-spacing: 0.04em; transition: background 0.12s; flex-shrink: 0;
+    white-space: nowrap;
+  }
+  #color-copy-btn:hover { background: var(--brand-hover); }
+  #color-copy-btn.copied { background: var(--green); }
+  .color-hint { font-size: 10px; color: var(--text-muted); font-family: 'Fira Code', monospace; line-height: 1.4; }
+  .color-hint code { background: #1a1b1e; padding: 1px 4px; border-radius: 3px; font-size: 10px; }
+  #flash-msg { font-size: 11px; font-weight: 700; color: var(--yellow); display: none; margin-left: 4px; }
+
+  /* ===== OUTPUT PANEL ===== */
+  #output-panel { display: flex; flex-direction: column; overflow: hidden; background: var(--bg-secondary); }
   #output-scroll {
-    overflow-x: auto;
-    overflow-y: auto;
-    flex: 1;
-    background: var(--bg-secondary);
-    display: flex;
-    gap: 10px;
-    padding: 12px 16px;
+    overflow-x: auto; overflow-y: auto; flex: 1;
+    display: flex; gap: 10px; padding: 10px 14px;
   }
   #output-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
   #output-scroll::-webkit-scrollbar-track { background: var(--scrollbar); }
   #output-scroll::-webkit-scrollbar-thumb { background: var(--surface); border-radius: 4px; }
-
   .output-chunk {
-    flex-shrink: 0;
-    width: 260px;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition: border-color 0.15s;
+    flex-shrink: 0; width: 250px; background: var(--bg-tertiary);
+    border: 1px solid var(--border); border-radius: 6px;
+    display: flex; flex-direction: column; overflow: hidden; transition: border-color 0.15s;
   }
   .output-chunk:hover { border-color: var(--brand); }
-
   .chunk-header {
-    background: var(--bg-modifier);
-    padding: 5px 10px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
+    background: var(--bg-modifier); padding: 5px 10px; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+    display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
   }
-
-  .chunk-len {
-    font-family: 'Fira Code', monospace;
-    font-size: 10px;
-  }
+  .chunk-len { font-family: 'Fira Code', monospace; font-size: 10px; }
   .chunk-len.over { color: var(--red); }
   .chunk-len.ok { color: var(--green); }
-
   .chunk-text {
-    padding: 8px 10px;
-    font-family: 'Fira Code', monospace;
-    font-size: 11px;
-    line-height: 1.5;
-    color: var(--text-normal);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: pre-wrap;
-    word-break: break-word;
-    flex: 1;
-    max-height: 90px;
-    overflow-y: auto;
+    padding: 8px 10px; font-family: 'Fira Code', monospace; font-size: 11px;
+    line-height: 1.5; color: var(--text-normal); white-space: pre-wrap;
+    word-break: break-word; flex: 1; max-height: 75px; overflow-y: auto;
   }
-
-  .chunk-actions {
-    padding: 5px 8px;
-    display: flex;
-    gap: 4px;
-    border-top: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-
+  .chunk-actions { padding: 5px 8px; display: flex; border-top: 1px solid var(--border); flex-shrink: 0; }
   .copy-btn {
-    background: var(--brand);
-    border: none;
-    color: #fff;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-family: 'Chakra Petch', monospace;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.12s;
-    flex: 1;
-    letter-spacing: 0.04em;
+    background: var(--brand); border: none; color: #fff; padding: 4px 10px;
+    border-radius: 4px; font-size: 11px; font-family: 'Chakra Petch', monospace;
+    font-weight: 600; cursor: pointer; transition: background 0.12s; flex: 1; letter-spacing: 0.04em;
   }
   .copy-btn:hover { background: var(--brand-hover); }
   .copy-btn.copied { background: var(--green); }
+  .badge { display: inline-flex; align-items: center; font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 10px; }
+  .badge-nitro { background: var(--nitro-grad); color: #fff; }
+  .badge-standard { background: var(--brand); color: #fff; }
+  #over-warning { color: var(--red); font-size: 10px; font-weight: 700; margin-left: auto; }
 
-  /* Footer */
   #footer {
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border);
-    padding: 5px 16px;
-    font-size: 10px;
-    color: var(--text-muted);
+    background: var(--bg-secondary); border-top: 1px solid var(--border);
+    padding: 4px 16px; font-size: 10px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 14px; flex-shrink: 0; letter-spacing: 0.03em;
+  }
+
+  /* ===== THEME SWITCHER ===== */
+  #theme-switcher {
+    margin-left: auto;
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 7px;
     flex-shrink: 0;
-    letter-spacing: 0.04em;
   }
-  #footer span { display: flex; align-items: center; gap: 4px; }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 9px;
+  #theme-switcher-label {
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 2px 7px;
-    border-radius: 10px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    white-space: nowrap;
   }
-  .badge-nitro {
-    background: var(--nitro-grad);
-    color: #fff;
-  }
-  .badge-standard {
-    background: var(--brand);
-    color: #fff;
-  }
-
-  /* Segment warning badge */
-  .seg-badge {
-    display: inline-flex;
+  #theme-btn {
+    display: flex;
     align-items: center;
-    background: var(--red);
-    color: #fff;
+    gap: 6px;
+    background: var(--bg-modifier);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px 5px 8px;
+    cursor: pointer;
+    font-family: 'Chakra Petch', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-normal);
+    transition: background 0.12s, border-color 0.12s;
+    white-space: nowrap;
+  }
+  #theme-btn:hover { background: var(--surface-hover); border-color: var(--brand); }
+  .theme-swatch-preview {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.15);
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .theme-chevron {
     font-size: 9px;
-    font-weight: 700;
-    padding: 1px 5px;
+    color: var(--text-muted);
+    transition: transform 0.15s;
+    margin-left: 2px;
+  }
+  #theme-btn.open .theme-chevron { transform: rotate(180deg); }
+  #theme-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
     border-radius: 8px;
-    margin-left: 4px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    z-index: 9999;
+    overflow: hidden;
+    min-width: 170px;
+    animation: dropIn 0.12s ease;
   }
-
-  /* === RESPONSIVE === */
-  @media (max-width: 700px) {
-    #panels { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
-    #topbar-row1 { flex-wrap: wrap; }
+  #theme-dropdown.open { display: block; }
+  @keyframes dropIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+  .theme-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-family: 'Chakra Petch', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-normal);
+    transition: background 0.1s;
+    border-bottom: 1px solid var(--border);
   }
+  .theme-option:last-child { border-bottom: none; }
+  .theme-option:hover { background: var(--surface-hover); }
+  .theme-option.active { color: var(--brand); }
+  .theme-option.active .theme-check { visibility: visible; }
+  .theme-swatch-large {
+    width: 28px; height: 18px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+    display: flex;
+    overflow: hidden;
+  }
+  .theme-swatch-large .sw-left { flex: 1; }
+  .theme-swatch-large .sw-right { flex: 1; }
+  .theme-check { visibility: hidden; font-size: 11px; margin-left: auto; color: var(--brand); }
+  .theme-desc { font-size: 9px; color: var(--text-muted); font-weight: 400; letter-spacing: 0; }
 </style>
 </head>
 <body>
@@ -549,16 +489,13 @@
 <!-- TOP BAR -->
 <div id="topbar">
   <div id="topbar-row1">
-    <!-- Logo -->
     <div class="app-logo">
       <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M23.7 4.3C22 3.5 20.2 2.9 18.3 2.5c-.2.4-.5.9-.7 1.3A18 18 0 0 0 9.4 3.8c-.2-.4-.4-.9-.7-1.3C6.7 2.9 4.9 3.5 3.2 4.3 0 9.2-.9 14 .4 18.6c2.2 1.6 4.3 2.5 6.4 3.1.5-.7 1-1.4 1.4-2.2-.8-.3-1.5-.6-2.2-1l.5-.4c4.2 1.9 8.8 1.9 13 0l.5.4c-.7.4-1.5.8-2.2 1 .4.8.9 1.5 1.4 2.2 2.1-.6 4.2-1.5 6.4-3.1 1.5-5.3.4-9.9-2.4-14.3ZM9.4 15.9c-1.3 0-2.4-1.2-2.4-2.6s1.1-2.6 2.4-2.6c1.3 0 2.4 1.2 2.4 2.6s-1.1 2.6-2.4 2.6Zm9.2 0c-1.3 0-2.4-1.2-2.4-2.6s1.1-2.6 2.4-2.6c1.3 0 2.4 1.2 2.4 2.6s-1.1 2.6-2.4 2.6Z" fill="#5865F2"/>
       </svg>
-      <span class="app-title">Discord MD Editor</span>
+      <span class="app-title">Discord All in One <span style="color:var(--brand);font-size:11px;opacity:0.8;">D1</span></span>
     </div>
     <div class="divider-v"></div>
-
-    <!-- Text Formatting -->
     <div class="toolbar-group">
       <span class="group-label">Text</span>
       <button class="btn bold-btn" title="Bold (**text**)" onclick="wrapSelection('**','**')"><b>B</b></button>
@@ -567,8 +504,6 @@
       <button class="btn strike-btn" title="Strikethrough (~~text~~)" onclick="wrapSelection('~~','~~')"><s>S</s></button>
       <button class="btn" title="Spoiler (||text||)" onclick="wrapSelection('||','||')" style="font-size:11px;">👁</button>
     </div>
-
-    <!-- Headers -->
     <div class="toolbar-group">
       <span class="group-label">Headers</span>
       <button class="btn" title="H1 Heading" onclick="insertLinePrefix('# ')">H1</button>
@@ -576,314 +511,309 @@
       <button class="btn" title="H3 Heading" onclick="insertLinePrefix('### ')">H3</button>
       <button class="btn" title="Subtext (-# text)" onclick="insertLinePrefix('-# ')" style="font-size:11px;">sub</button>
     </div>
-
-    <!-- Lists & Quotes -->
     <div class="toolbar-group">
       <span class="group-label">Lists</span>
-      <button class="btn" title="Unordered List (- item)" onclick="insertLinePrefix('- ')">• List</button>
-      <button class="btn" title="Ordered List (1. item)" onclick="insertOrderedList()">1. List</button>
-      <button class="btn" title="Blockquote (> text)" onclick="insertLinePrefix('> ')">❝</button>
-      <button class="btn" title="Multi-line Blockquote (>>> text)" onclick="insertLinePrefix('>>> ')" style="font-size:10px;">❝❝</button>
+      <button class="btn" title="Unordered List" onclick="insertLinePrefix('- ')">• List</button>
+      <button class="btn" title="Ordered List" onclick="insertOrderedList()">1. List</button>
+      <button class="btn" title="Blockquote" onclick="insertLinePrefix('> ')">❝</button>
+      <button class="btn" title="Multi-line Blockquote" onclick="insertLinePrefix('>>> ')" style="font-size:10px;">❝❝</button>
     </div>
-
-    <!-- Code -->
     <div class="toolbar-group">
       <span class="group-label">Code</span>
-      <button class="btn code-btn" title="Inline Code (`text`)" onclick="wrapSelection('`','`')">`code`</button>
-      <button class="btn code-btn" title="Code Block (```text```)" onclick="wrapCodeBlock()">```block```</button>
+      <button class="btn code-btn" title="Inline Code" onclick="wrapSelection('`','`')">`code`</button>
+      <button class="btn code-btn" title="Code Block" onclick="wrapCodeBlock()">```block```</button>
     </div>
-
-    <!-- Link -->
     <div class="toolbar-group">
       <span class="group-label">Link</span>
       <button class="btn" title="Masked Link [Text](URL)" onclick="insertMaskedLink()">🔗 Link</button>
     </div>
-  </div>
 
-  <!-- Plan row -->
+    <!-- Theme Switcher -->
+    <div id="theme-switcher">
+      <span id="theme-switcher-label">Theme</span>
+      <button id="theme-btn" onclick="toggleThemeDropdown()" aria-haspopup="true">
+        <span class="theme-swatch-preview" id="active-swatch" style="background:#313338"></span>
+        <span id="active-theme-name">Dark</span>
+        <span class="theme-chevron">▼</span>
+      </button>
+      <div id="theme-dropdown">
+        <div class="theme-option active" data-theme="dark" onclick="setTheme('dark')">
+          <div class="theme-swatch-large"><div class="sw-left" style="background:#1e1f22"></div><div class="sw-right" style="background:#313338"></div></div>
+          <div><div>Dark</div><div class="theme-desc">Default dark gray</div></div>
+          <span class="theme-check">✓</span>
+        </div>
+        <div class="theme-option" data-theme="ash" onclick="setTheme('ash')">
+          <div class="theme-swatch-large"><div class="sw-left" style="background:#2a2d31"></div><div class="sw-right" style="background:#35373c"></div></div>
+          <div><div>Ash</div><div class="theme-desc">Mid-gray warmth</div></div>
+          <span class="theme-check">✓</span>
+        </div>
+        <div class="theme-option" data-theme="onyx" onclick="setTheme('onyx')">
+          <div class="theme-swatch-large"><div class="sw-left" style="background:#111214"></div><div class="sw-right" style="background:#1e1f22"></div></div>
+          <div><div>Onyx</div><div class="theme-desc">Near-black dark</div></div>
+          <span class="theme-check">✓</span>
+        </div>
+        <div class="theme-option" data-theme="midnight" onclick="setTheme('midnight')">
+          <div class="theme-swatch-large"><div class="sw-left" style="background:#000000"></div><div class="sw-right" style="background:#121212"></div></div>
+          <div><div>Midnight</div><div class="theme-desc">AMOLED pitch black</div></div>
+          <span class="theme-check">✓</span>
+        </div>
+        <div class="theme-option" data-theme="light" onclick="setTheme('light')">
+          <div class="theme-swatch-large"><div class="sw-left" style="background:#e3e5e8"></div><div class="sw-right" style="background:#ebedef"></div></div>
+          <div><div>Light</div><div class="theme-desc">White &amp; light gray</div></div>
+          <span class="theme-check">✓</span>
+        </div>
+      </div>
+    </div>
+  </div>
   <div id="plan-row">
     <span class="plan-label">Plan:</span>
-    <button class="plan-btn selected-standard" id="btn-standard" onclick="setPlan('standard')">
-      Standard Discord
-    </button>
-    <button class="plan-btn" id="btn-nitro" onclick="setPlan('nitro')">
-      ✦ Discord Nitro
-    </button>
-
-    <div class="char-counter" id="char-counter">
-      <span class="count" id="char-count">0</span>
-      <span class="limit-label"> / </span>
-      <span class="count" id="char-limit">2000</span>
-      <span class="limit-label"> chars · </span>
-      <span class="count" id="seg-count">1</span>
-      <span class="limit-label"> segment(s)</span>
+    <button class="plan-btn selected-standard" id="btn-standard" onclick="setPlan('standard')">Standard Discord</button>
+    <button class="plan-btn" id="btn-nitro" onclick="setPlan('nitro')">✦ Discord Nitro</button>
+    <div class="char-counter">
+      <span class="count" id="char-count">0</span><span> / </span>
+      <span class="count" id="char-limit">2000</span><span> chars · </span>
+      <span class="count" id="seg-count">1</span><span> segment(s)</span>
     </div>
   </div>
 </div>
 
-<!-- MAIN PANELS -->
-<div id="panels">
-  <!-- Left: Editor -->
-  <div class="panel" style="border-right: 1px solid var(--border);">
-    <div class="panel-header">
-      <span class="dot dot-edit"></span>
-      Markdown Editor
+<!-- MAIN LAYOUT -->
+<div id="main-layout">
+
+  <!-- TOP: Editor + Preview -->
+  <div id="top-panels">
+    <div class="panel" style="border-right:1px solid var(--border)">
+      <div class="panel-header"><span class="dot dot-edit"></span>Markdown Editor</div>
+      <textarea id="editor" spellcheck="true"
+        placeholder="Start typing your Discord message here...&#10;&#10;**bold**  *italic*  __underline__  ~~strike~~  ||spoiler||&#10;# Heading 1&#10;> Blockquote&#10;`inline code`"></textarea>
     </div>
-    <textarea id="editor" spellcheck="true"
-      placeholder="Start typing your Discord message here...&#10;&#10;Use the toolbar above to apply formatting, or type markdown syntax directly.&#10;&#10;Examples:&#10;**bold** *italic* __underline__ ~~strikethrough~~ ||spoiler||&#10;# Heading 1&#10;> Blockquote&#10;`inline code`"></textarea>
-  </div>
-
-  <!-- Right: Preview -->
-  <div class="panel">
-    <div class="panel-header">
-      <span class="dot dot-preview"></span>
-      Discord Preview
+    <div class="panel">
+      <div class="panel-header"><span class="dot dot-preview"></span>Discord Preview</div>
+      <div id="preview-panel"></div>
     </div>
-    <div id="preview-panel"></div>
   </div>
-</div>
 
-<!-- OUTPUT PANEL -->
-<div id="output-wrapper">
-  <div id="output-header">
-    <span class="dot dot-output"></span>
-    Copy-Paste Output
-    <span id="plan-badge" class="badge badge-standard">Standard · 2000 chars</span>
-    <span id="over-warning" style="display:none; color: var(--red); font-size:10px; font-weight:700; margin-left:auto;">⚠ Word split — segments adjusted</span>
-  </div>
-  <div id="output-scroll"></div>
-</div>
+  <!-- BOTTOM: ANSI Color Editor + Output Segments -->
+  <div id="bottom-section">
 
-<!-- FOOTER -->
+    <!-- ANSI Color Editor -->
+    <div id="color-panel">
+      <div class="panel-header">
+        <span class="dot dot-color"></span>
+        ANSI Color Editor
+        <span style="font-size:9px;color:var(--text-muted);font-weight:400;margin-left:2px;">— desktop Discord only, inside ```ansi blocks</span>
+      </div>
+
+      <div id="color-toolbar">
+
+        <!-- FG Row -->
+        <div class="color-row">
+          <span class="color-row-label">FG</span>
+          <!-- 8 foreground swatches -->
+          <div class="color-swatch active-color" id="fg-30" style="background:#4f545c" title="Gray (30)"   data-type="fg" data-code="30" onclick="selectColor(this)"></div>
+          <div class="color-swatch"              id="fg-31" style="background:#dc322f" title="Red (31)"    data-type="fg" data-code="31" onclick="selectColor(this)"></div>
+          <div class="color-swatch"              id="fg-32" style="background:#859900" title="Green (32)"  data-type="fg" data-code="32" onclick="selectColor(this)"></div>
+          <div class="color-swatch"              id="fg-33" style="background:#b58900" title="Yellow (33)" data-type="fg" data-code="33" onclick="selectColor(this)"></div>
+          <div class="color-swatch"              id="fg-34" style="background:#268bd2" title="Blue (34)"   data-type="fg" data-code="34" onclick="selectColor(this)"></div>
+          <div class="color-swatch"              id="fg-35" style="background:#d33682" title="Pink (35)"   data-type="fg" data-code="35" onclick="selectColor(this)"></div>
+          <div class="color-swatch"              id="fg-36" style="background:#2aa198" title="Cyan (36)"   data-type="fg" data-code="36" onclick="selectColor(this)"></div>
+          <div class="color-swatch"              id="fg-37" style="background:#ffffff;border-color:#555" title="White (37)"  data-type="fg" data-code="37" onclick="selectColor(this)"></div>
+          <div class="color-divider"></div>
+          <button class="apply-btn apply-fg" onmousedown="preventBlur(event)" onclick="applyColor('fg')">Apply FG</button>
+          <div class="sel-preview">
+            <span style="color:var(--text-muted)">FG</span>
+            <span class="sel-dot" id="fg-preview" style="background:#4f545c" title="Selected FG"></span>
+            <span style="color:var(--text-muted)">BG</span>
+            <span class="sel-dot" id="bg-preview" style="background:transparent;border-style:dashed" title="Selected BG"></span>
+          </div>
+        </div>
+
+        <!-- BG Row -->
+        <div class="color-row">
+          <span class="color-row-label">BG</span>
+          <!-- "None" swatch + 8 background swatches -->
+          <div class="color-swatch active-color" id="bg-none" style="background:transparent;border:2px dashed #555" title="No BG" data-type="bg" data-code="none" onclick="selectColor(this)"></div>
+          <div class="color-swatch" id="bg-40" style="background:#002b36" title="Dark Blue (40)"    data-type="bg" data-code="40" onclick="selectColor(this)"></div>
+          <div class="color-swatch" id="bg-41" style="background:#cb4b16" title="Orange (41)"       data-type="bg" data-code="41" onclick="selectColor(this)"></div>
+          <div class="color-swatch" id="bg-42" style="background:#586e75" title="Gray (42)"         data-type="bg" data-code="42" onclick="selectColor(this)"></div>
+          <div class="color-swatch" id="bg-43" style="background:#657b83" title="Light Gray (43)"   data-type="bg" data-code="43" onclick="selectColor(this)"></div>
+          <div class="color-swatch" id="bg-44" style="background:#839496" title="Lighter Gray (44)" data-type="bg" data-code="44" onclick="selectColor(this)"></div>
+          <div class="color-swatch" id="bg-45" style="background:#6c71c4" title="Indigo (45)"       data-type="bg" data-code="45" onclick="selectColor(this)"></div>
+          <div class="color-swatch" id="bg-46" style="background:#93a1a1" title="Pale Blue (46)"    data-type="bg" data-code="46" onclick="selectColor(this)"></div>
+          <div class="color-swatch" id="bg-47" style="background:#fdf6e3;border-color:#555" title="White (47)" data-type="bg" data-code="47" onclick="selectColor(this)"></div>
+          <div class="color-divider"></div>
+          <button class="apply-btn apply-bg"  onmousedown="preventBlur(event)" onclick="applyColor('bg')">Apply BG</button>
+          <button class="apply-btn clear-btn" onmousedown="preventBlur(event)" onclick="clearColors()" style="margin-left:3px;">✕ Clear</button>
+        </div>
+
+      </div><!-- end color-toolbar -->
+
+      <!-- The rich-text canvas where colors are applied visually -->
+      <div id="color-canvas" contenteditable="true" spellcheck="true"></div>
+
+      <!-- Copy button row -->
+      <div id="color-output-row">
+        <button id="color-copy-btn" onclick="copyAnsiBlock()">⎘ Copy ANSI Block</button>
+        <span class="color-hint">Outputs a <code>```ansi```</code> block · paste directly into Discord desktop</span>
+        <span id="flash-msg"></span>
+      </div>
+    </div>
+
+    <!-- Segment Output -->
+    <div id="output-panel">
+      <div class="panel-header">
+        <span class="dot dot-output"></span>
+        Copy-Paste Output
+        <span id="plan-badge" class="badge badge-standard">Standard · 2000 chars</span>
+        <span id="over-warning" style="display:none">⚠ Word split — adjusted</span>
+      </div>
+      <div id="output-scroll"></div>
+    </div>
+
+  </div><!-- end bottom-section -->
+</div><!-- end main-layout -->
+
 <div id="footer">
-  <span>⌨ Type markdown or use toolbar</span>
+  <span>⌨ Markdown editor top-left</span>
   <span>|</span>
-  <span>Click spoilers in preview to reveal</span>
+  <span>Color editor: type → highlight → pick color → Apply FG/BG</span>
   <span>|</span>
-  <span>Segments break at word boundaries</span>
+  <span>ANSI colors only render on Discord desktop/browser</span>
 </div>
 
 <script>
-// ---- State ----
+// ================================================================
+// STATE
+// ================================================================
 let plan = 'standard';
 let charLimit = 2000;
+let activeFgCode = '30';   // default: gray
+let activeBgCode = 'none'; // default: no background
+let savedRange = null;     // saved contenteditable selection
 
-const editor = document.getElementById('editor');
-const previewPanel = document.getElementById('preview-panel');
-const outputScroll = document.getElementById('output-scroll');
-const charCountEl = document.getElementById('char-count');
-const charLimitEl = document.getElementById('char-limit');
-const segCountEl = document.getElementById('seg-count');
-const planBadge = document.getElementById('plan-badge');
-const overWarning = document.getElementById('over-warning');
+// Color lookup maps
+const FG_HEX = { '30':'#4f545c','31':'#dc322f','32':'#859900','33':'#b58900','34':'#268bd2','35':'#d33682','36':'#2aa198','37':'#ffffff' };
+const BG_HEX = { 'none':'transparent','40':'#002b36','41':'#cb4b16','42':'#586e75','43':'#657b83','44':'#839496','45':'#6c71c4','46':'#93a1a1','47':'#fdf6e3' };
 
-// ---- Plan switching ----
+const editor        = document.getElementById('editor');
+const previewPanel  = document.getElementById('preview-panel');
+const outputScroll  = document.getElementById('output-scroll');
+const charCountEl   = document.getElementById('char-count');
+const charLimitEl   = document.getElementById('char-limit');
+const segCountEl    = document.getElementById('seg-count');
+const planBadge     = document.getElementById('plan-badge');
+const overWarning   = document.getElementById('over-warning');
+const colorCanvas   = document.getElementById('color-canvas');
+const fgPreview     = document.getElementById('fg-preview');
+const bgPreview     = document.getElementById('bg-preview');
+const flashMsg      = document.getElementById('flash-msg');
+
+// ================================================================
+// PLAN SWITCHER
+// ================================================================
 function setPlan(p) {
-  plan = p;
-  charLimit = p === 'nitro' ? 4000 : 2000;
+  plan = p; charLimit = p === 'nitro' ? 4000 : 2000;
   charLimitEl.textContent = charLimit;
-
   document.getElementById('btn-standard').className = 'plan-btn' + (p === 'standard' ? ' selected-standard' : '');
-  document.getElementById('btn-nitro').className = 'plan-btn' + (p === 'nitro' ? ' selected-nitro' : '');
-
-  planBadge.className = 'badge ' + (p === 'nitro' ? 'badge-nitro' : 'badge-standard');
+  document.getElementById('btn-nitro').className    = 'plan-btn' + (p === 'nitro'    ? ' selected-nitro'    : '');
+  planBadge.className   = 'badge ' + (p === 'nitro' ? 'badge-nitro' : 'badge-standard');
   planBadge.textContent = p === 'nitro' ? '✦ Nitro · 4000 chars' : 'Standard · 2000 chars';
-
   update();
 }
 
-// ---- Toolbar actions ----
-function getEditorSelection() {
-  const start = editor.selectionStart;
-  const end = editor.selectionEnd;
-  return { start, end, selected: editor.value.slice(start, end) };
+// ================================================================
+// MARKDOWN TOOLBAR HELPERS
+// ================================================================
+function getEditorSel() {
+  return { start: editor.selectionStart, end: editor.selectionEnd, selected: editor.value.slice(editor.selectionStart, editor.selectionEnd) };
 }
+function setEditorVal(val, s, e) { editor.value = val; editor.focus(); editor.setSelectionRange(s, e); update(); }
 
-function setEditorValue(val, cursorStart, cursorEnd) {
-  editor.value = val;
-  editor.focus();
-  editor.setSelectionRange(cursorStart, cursorEnd);
-  update();
+function wrapSelection(b, a) {
+  const { start, end, selected } = getEditorSel();
+  const nt = b + selected + a;
+  const nv = editor.value.slice(0, start) + nt + editor.value.slice(end);
+  const nc = selected ? start + nt.length : start + b.length;
+  setEditorVal(nv, nc, nc);
 }
-
-function wrapSelection(before, after) {
-  const { start, end, selected } = getEditorSelection();
-  const val = editor.value;
-  const newText = before + selected + after;
-  const newVal = val.slice(0, start) + newText + val.slice(end);
-  const newCursor = selected ? start + newText.length : start + before.length;
-  setEditorValue(newVal, newCursor, selected ? newCursor : newCursor);
-}
-
 function insertLinePrefix(prefix) {
-  const { start, end } = getEditorSelection();
-  const val = editor.value;
-  // Find start of line
-  let lineStart = val.lastIndexOf('\n', start - 1) + 1;
-  const newVal = val.slice(0, lineStart) + prefix + val.slice(lineStart);
-  const offset = prefix.length;
-  setEditorValue(newVal, start + offset, end + offset);
+  const { start, end } = getEditorSel();
+  const ls = editor.value.lastIndexOf('\n', start - 1) + 1;
+  setEditorVal(editor.value.slice(0, ls) + prefix + editor.value.slice(ls), start + prefix.length, end + prefix.length);
 }
-
 function insertOrderedList() {
-  const { start } = getEditorSelection();
-  const val = editor.value;
-  let lineStart = val.lastIndexOf('\n', start - 1) + 1;
-  // Count existing ordered items before this point
-  const before = val.slice(0, lineStart);
-  const lines = before.split('\n');
+  const { start } = getEditorSel();
+  const ls = editor.value.lastIndexOf('\n', start - 1) + 1;
+  const lines = editor.value.slice(0, ls).split('\n');
   let num = 1;
   for (let i = lines.length - 1; i >= 0; i--) {
     if (/^\d+\.\s/.test(lines[i])) { num = parseInt(lines[i]) + 1; break; }
-    else if (lines[i].trim() !== '') break;
+    else if (lines[i].trim()) break;
   }
-  const prefix = num + '. ';
-  const newVal = val.slice(0, lineStart) + prefix + val.slice(lineStart);
-  setEditorValue(newVal, start + prefix.length, start + prefix.length);
+  const p = num + '. ';
+  setEditorVal(editor.value.slice(0, ls) + p + editor.value.slice(ls), start + p.length, start + p.length);
 }
-
 function wrapCodeBlock() {
-  const { start, end, selected } = getEditorSelection();
-  const val = editor.value;
-  const before = '```\n';
-  const after = '\n```';
-  const newVal = val.slice(0, start) + before + selected + after + val.slice(end);
-  const newCursor = start + before.length + (selected ? selected.length + after.length : 0);
-  setEditorValue(newVal, selected ? newCursor : start + before.length, selected ? newCursor : start + before.length);
+  const { start, end, selected } = getEditorSel();
+  const b = '```\n', a = '\n```';
+  const nv = editor.value.slice(0, start) + b + selected + a + editor.value.slice(end);
+  const nc = selected ? start + b.length + selected.length + a.length : start + b.length;
+  setEditorVal(nv, nc, nc);
 }
-
 function insertMaskedLink() {
-  const { start, end, selected } = getEditorSelection();
-  const val = editor.value;
-  const linkText = selected || 'Link Text';
-  const insert = `[${linkText}](https://url.here)`;
-  const newVal = val.slice(0, start) + insert + val.slice(end);
-  setEditorValue(newVal, start + insert.length, start + insert.length);
+  const { start, end, selected } = getEditorSel();
+  const ins = `[${selected || 'Link Text'}](https://url.here)`;
+  setEditorVal(editor.value.slice(0, start) + ins + editor.value.slice(end), start + ins.length, start + ins.length);
 }
 
-// ---- Discord Markdown Parser (preview) ----
+// ================================================================
+// DISCORD MARKDOWN RENDERER
+// ================================================================
 function parseDiscordMarkdown(text) {
-  // Escape HTML entities first
-  const escape = s => s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-
-  const lines = text.split('\n');
-  let html = '';
-  let i = 0;
-
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const lines = text.split('\n'); let html = '', i = 0;
   while (i < lines.length) {
-    const line = lines[i];
-    const raw = line;
-
-    // Multi-line blockquote >>>
-    if (/^>>>\s?/.test(raw)) {
-      let bq = raw.replace(/^>>>\s?/, '');
-      i++;
-      while (i < lines.length) { bq += '\n' + lines[i]; i++; }
-      html += `<blockquote>${parseInline(bq)}</blockquote>`;
-      continue;
-    }
-    // Code block
-    if (/^```/.test(raw)) {
-      let code = '';
-      const lang = raw.slice(3).trim();
-      i++;
-      while (i < lines.length && !/^```/.test(lines[i])) {
-        code += (code ? '\n' : '') + lines[i];
-        i++;
-      }
-      i++; // skip closing ```
-      html += `<pre><code>${escape(code)}</code></pre>`;
-      continue;
-    }
-    // H1
-    if (/^# /.test(raw)) { html += `<h1>${parseInline(raw.slice(2))}</h1>`; i++; continue; }
-    // H2
-    if (/^## /.test(raw)) { html += `<h2>${parseInline(raw.slice(3))}</h2>`; i++; continue; }
-    // H3
-    if (/^### /.test(raw)) { html += `<h3>${parseInline(raw.slice(4))}</h3>`; i++; continue; }
-    // Subtext
-    if (/^-# /.test(raw)) { html += `<p class="subtext">${parseInline(raw.slice(3))}</p>`; i++; continue; }
-    // Single blockquote
-    if (/^> /.test(raw)) { html += `<blockquote>${parseInline(raw.slice(2))}</blockquote>`; i++; continue; }
-    // Unordered list
-    if (/^[*-] /.test(raw)) {
-      let items = '';
-      while (i < lines.length && /^[*-] /.test(lines[i])) {
-        items += `<li>${parseInline(lines[i].slice(2))}</li>`;
-        i++;
-      }
-      html += `<ul>${items}</ul>`;
-      continue;
-    }
-    // Ordered list
-    if (/^\d+\. /.test(raw)) {
-      let items = '';
-      while (i < lines.length && /^\d+\. /.test(lines[i])) {
-        items += `<li>${parseInline(lines[i].replace(/^\d+\. /, ''))}</li>`;
-        i++;
-      }
-      html += `<ol>${items}</ol>`;
-      continue;
-    }
-    // Empty line
-    if (raw.trim() === '') { html += `<p></p>`; i++; continue; }
-    // Regular paragraph
-    html += `<p>${parseInline(raw)}</p>`;
-    i++;
+    const raw = lines[i];
+    if (/^>>>\s?/.test(raw)) { let bq = raw.replace(/^>>>\s?/,''); i++; while(i<lines.length){bq+='\n'+lines[i];i++;} html+=`<blockquote>${parseInline(bq)}</blockquote>`; continue; }
+    if (/^```/.test(raw)) { let code=''; i++; while(i<lines.length&&!/^```/.test(lines[i])){code+=(code?'\n':'')+lines[i];i++;} i++; html+=`<pre><code>${esc(code)}</code></pre>`; continue; }
+    if (/^# /.test(raw))   { html+=`<h1>${parseInline(raw.slice(2))}</h1>`;  i++; continue; }
+    if (/^## /.test(raw))  { html+=`<h2>${parseInline(raw.slice(3))}</h2>`;  i++; continue; }
+    if (/^### /.test(raw)) { html+=`<h3>${parseInline(raw.slice(4))}</h3>`;  i++; continue; }
+    if (/^-# /.test(raw))  { html+=`<p class="subtext">${parseInline(raw.slice(3))}</p>`; i++; continue; }
+    if (/^> /.test(raw))   { html+=`<blockquote>${parseInline(raw.slice(2))}</blockquote>`; i++; continue; }
+    if (/^[*-] /.test(raw)) { let it=''; while(i<lines.length&&/^[*-] /.test(lines[i])){it+=`<li>${parseInline(lines[i].slice(2))}</li>`;i++;} html+=`<ul>${it}</ul>`; continue; }
+    if (/^\d+\. /.test(raw)) { let it=''; while(i<lines.length&&/^\d+\. /.test(lines[i])){it+=`<li>${parseInline(lines[i].replace(/^\d+\. /,''))}</li>`;i++;} html+=`<ol>${it}</ol>`; continue; }
+    if (raw.trim()==='') { html+=`<p></p>`; i++; continue; }
+    html+=`<p>${parseInline(raw)}</p>`; i++;
   }
   return html;
 }
-
 function parseInline(text) {
-  const escape = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  let s = escape(text);
-
-  // Masked links [text](url)
-  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, t, u) => `<a href="${u}" target="_blank">${t}</a>`);
-  // Inline code
-  s = s.replace(/`([^`]+)`/g, (_, c) => `<code>${c}</code>`);
-  // Bold+italic ***
-  s = s.replace(/\*\*\*(.+?)\*\*\*/g, (_, t) => `<strong><em>${t}</em></strong>`);
-  // Bold **
-  s = s.replace(/\*\*(.+?)\*\*/g, (_, t) => `<strong>${t}</strong>`);
-  // Underline __
-  s = s.replace(/__(.+?)__/g, (_, t) => `<u>${t}</u>`);
-  // Italic *
-  s = s.replace(/\*([^*]+)\*/g, (_, t) => `<em>${t}</em>`);
-  // Italic _
-  s = s.replace(/_([^_]+)_/g, (_, t) => `<em>${t}</em>`);
-  // Strikethrough ~~
-  s = s.replace(/~~(.+?)~~/g, (_, t) => `<s>${t}</s>`);
-  // Spoiler ||
-  s = s.replace(/\|\|(.+?)\|\|/g, (_, t) => `<span class="spoiler" onclick="this.classList.toggle('revealed')">${t}</span>`);
-
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  let s = esc(text);
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_,t,u)=>`<a href="${u}" target="_blank">${t}</a>`);
+  s = s.replace(/`([^`]+)`/g, (_,c)=>`<code>${c}</code>`);
+  s = s.replace(/\*\*\*(.+?)\*\*\*/g, (_,t)=>`<strong><em>${t}</em></strong>`);
+  s = s.replace(/\*\*(.+?)\*\*/g, (_,t)=>`<strong>${t}</strong>`);
+  s = s.replace(/__(.+?)__/g, (_,t)=>`<u>${t}</u>`);
+  s = s.replace(/\*([^*]+)\*/g, (_,t)=>`<em>${t}</em>`);
+  s = s.replace(/_([^_]+)_/g, (_,t)=>`<em>${t}</em>`);
+  s = s.replace(/~~(.+?)~~/g, (_,t)=>`<s>${t}</s>`);
+  s = s.replace(/\|\|(.+?)\|\|/g, (_,t)=>`<span class="spoiler" onclick="this.classList.toggle('revealed')">${t}</span>`);
   return s;
 }
 
-// ---- Segment splitting ----
+// ================================================================
+// SEGMENT SPLITTING
+// ================================================================
 function splitIntoSegments(text, limit) {
-  if (!text) return [];
-  if (text.length <= limit) return [text];
-
-  const segments = [];
-  let remaining = text;
-  let splitWarning = false;
-
+  if (!text) return { segments: [], splitWarning: false };
+  if (text.length <= limit) return { segments: [text], splitWarning: false };
+  const segments = []; let remaining = text, splitWarning = false;
   while (remaining.length > limit) {
-    let cutAt = limit;
-    // Find last whitespace at or before limit
     const sub = remaining.slice(0, limit);
     const lastSpace = sub.search(/\s(?=\S*$)/);
-    if (lastSpace > 0) {
-      cutAt = lastSpace + 1; // cut after the whitespace
-    } else {
-      // No whitespace found — hard cut (rare)
-      splitWarning = true;
-    }
-    // Trim trailing whitespace from chunk
+    let cutAt = lastSpace > 0 ? lastSpace + 1 : (splitWarning = true, limit);
     segments.push(remaining.slice(0, cutAt).trimEnd());
     remaining = remaining.slice(cutAt).trimStart();
   }
@@ -891,88 +821,193 @@ function splitIntoSegments(text, limit) {
   return { segments, splitWarning };
 }
 
-// ---- Main update ----
+// ================================================================
+// MAIN UPDATE (markdown editor)
+// ================================================================
 function update() {
-  const text = editor.value;
-  const len = text.length;
-
-  // Update counter
+  const text = editor.value, len = text.length;
   charCountEl.textContent = len;
   charCountEl.className = len > charLimit ? 'count over' : 'count';
-
-  // Render preview
   previewPanel.innerHTML = parseDiscordMarkdown(text);
-
-  // Build output chunks
-  const result = splitIntoSegments(text, charLimit);
-  const segs = result.segments || result;
-  const hasSplitWarning = result.splitWarning || false;
-
+  const { segments: segs, splitWarning } = splitIntoSegments(text, charLimit);
   segCountEl.textContent = segs.length;
-  overWarning.style.display = hasSplitWarning ? 'inline' : 'none';
-
+  overWarning.style.display = splitWarning ? 'inline' : 'none';
   outputScroll.innerHTML = '';
   segs.forEach((seg, idx) => {
     const chunk = document.createElement('div');
     chunk.className = 'output-chunk';
-
-    const hdr = document.createElement('div');
-    hdr.className = 'chunk-header';
-    hdr.innerHTML = `<span>Segment ${idx + 1} of ${segs.length}</span><span class="chunk-len ${seg.length > charLimit ? 'over' : 'ok'}">${seg.length} / ${charLimit}</span>`;
-
-    const txt = document.createElement('div');
-    txt.className = 'chunk-text';
-    txt.textContent = seg;
-
-    const actions = document.createElement('div');
-    actions.className = 'chunk-actions';
-
+    chunk.innerHTML = `<div class="chunk-header"><span>Segment ${idx+1} of ${segs.length}</span><span class="chunk-len ${seg.length>charLimit?'over':'ok'}">${seg.length} / ${charLimit}</span></div><div class="chunk-text"></div><div class="chunk-actions"></div>`;
+    chunk.querySelector('.chunk-text').textContent = seg;
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
-    btn.textContent = `Copy Segment ${idx + 1}`;
-    btn.onclick = () => {
-      navigator.clipboard.writeText(seg).then(() => {
-        btn.textContent = '✓ Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = `Copy Segment ${idx + 1}`;
-          btn.classList.remove('copied');
-        }, 1800);
-      }).catch(() => {
-        // Fallback
-        const ta = document.createElement('textarea');
-        ta.value = seg;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        btn.textContent = '✓ Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = `Copy Segment ${idx + 1}`;
-          btn.classList.remove('copied');
-        }, 1800);
-      });
-    };
-
-    actions.appendChild(btn);
-    chunk.appendChild(hdr);
-    chunk.appendChild(txt);
-    chunk.appendChild(actions);
+    btn.textContent = `Copy Segment ${idx+1}`;
+    btn.onclick = () => copyText(seg, btn, `Copy Segment ${idx+1}`);
+    chunk.querySelector('.chunk-actions').appendChild(btn);
     outputScroll.appendChild(chunk);
   });
 }
 
-// ---- Event listeners ----
+function copyText(text, btn, label) {
+  const doIt = () => { btn.textContent = '✓ Copied!'; btn.classList.add('copied'); setTimeout(()=>{ btn.textContent=label; btn.classList.remove('copied'); }, 1800); };
+  navigator.clipboard.writeText(text).then(doIt).catch(() => {
+    const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); doIt();
+  });
+}
+
+// ================================================================
+// ANSI COLOR EDITOR
+// ================================================================
+
+// Prevent swatch / button clicks from stealing focus (and losing selection)
+function preventBlur(e) { e.preventDefault(); }
+
+// Save the current selection inside the canvas
+function saveSelection() {
+  const sel = window.getSelection();
+  if (sel && sel.rangeCount > 0 && colorCanvas.contains(sel.anchorNode)) {
+    savedRange = sel.getRangeAt(0).cloneRange();
+  }
+}
+
+// Restore a previously saved selection
+function restoreSelection() {
+  if (!savedRange) return false;
+  colorCanvas.focus();
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(savedRange);
+  return true;
+}
+
+// Track selection changes
+colorCanvas.addEventListener('mouseup', saveSelection);
+colorCanvas.addEventListener('keyup',   saveSelection);
+colorCanvas.addEventListener('blur',    saveSelection);
+
+// Swatch click: select active FG or BG color
+function selectColor(el) {
+  const type = el.dataset.type;
+  const code = el.dataset.code;
+  // Deselect siblings of same type
+  document.querySelectorAll(`[data-type="${type}"]`).forEach(s => s.classList.remove('active-color'));
+  el.classList.add('active-color');
+  if (type === 'fg') {
+    activeFgCode = code;
+    fgPreview.style.background = FG_HEX[code] || 'transparent';
+    fgPreview.style.borderStyle = 'solid';
+  } else {
+    activeBgCode = code;
+    bgPreview.style.background = BG_HEX[code] || 'transparent';
+    bgPreview.style.borderStyle = code === 'none' ? 'dashed' : 'solid';
+  }
+  // Restore the selection so the user's highlight stays visible
+  restoreSelection();
+}
+
+// Apply FG or BG to the currently selected text in the canvas
+function applyColor(type) {
+  if (!restoreSelection()) { flash('Highlight text in the color editor first!'); return; }
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0 || sel.isCollapsed) { flash('Highlight text in the color editor first!'); return; }
+  const range = sel.getRangeAt(0);
+  if (!colorCanvas.contains(range.commonAncestorContainer)) { flash('Highlight text inside the color editor!'); return; }
+
+  const code = type === 'fg' ? activeFgCode : activeBgCode;
+  const hex  = type === 'fg' ? FG_HEX[code] : BG_HEX[code];
+
+  // Extract the selected content and wrap in a styled span
+  const frag = range.extractContents();
+  const span = document.createElement('span');
+  span.dataset[type] = code;
+  if (type === 'fg' && hex) {
+    span.style.color = hex;
+  } else if (type === 'bg' && code !== 'none' && hex) {
+    span.style.backgroundColor = hex;
+    span.style.borderRadius = '2px';
+    span.style.padding = '0 1px';
+  }
+  span.appendChild(frag);
+  range.insertNode(span);
+
+  // Move caret after the span
+  const newRange = document.createRange();
+  newRange.setStartAfter(span); newRange.collapse(true);
+  sel.removeAllRanges(); sel.addRange(newRange);
+  savedRange = newRange.cloneRange();
+  colorCanvas.normalize();
+}
+
+// Strip color spans from selected text, leaving plain text
+function clearColors() {
+  if (!restoreSelection()) { flash('Highlight text to clear colors!'); return; }
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0 || sel.isCollapsed) { flash('Highlight text to clear colors!'); return; }
+  const range = sel.getRangeAt(0);
+  if (!colorCanvas.contains(range.commonAncestorContainer)) return;
+  const plainText = range.toString();
+  range.deleteContents();
+  range.insertNode(document.createTextNode(plainText));
+  colorCanvas.normalize();
+}
+
+// Flash a short message near the copy button
+function flash(msg) {
+  flashMsg.textContent = msg; flashMsg.style.display = 'inline';
+  setTimeout(() => { flashMsg.style.display = 'none'; flashMsg.textContent = ''; }, 2500);
+}
+
+// ----------------------------------------------------------------
+// Build the ANSI escape string from the color-canvas DOM
+// ----------------------------------------------------------------
+const ESC = '\u001b';
+
+function nodeToAnsi(node, inheritFg, inheritBg) {
+  if (node.nodeType === Node.TEXT_NODE) {
+    const t = node.textContent;
+    if (!t) return '';
+    const codes = [];
+    if (inheritFg) codes.push(inheritFg);
+    if (inheritBg && inheritBg !== 'none') codes.push(inheritBg);
+    if (!codes.length) return t;
+    return `${ESC}[${codes.join(';')}m${t}${ESC}[0m`;
+  }
+  if (node.nodeType === Node.ELEMENT_NODE) {
+    if (node.tagName === 'BR') return '\n';
+    // Block-level div = newline in contenteditable (Chrome)
+    const isBlock = node.tagName === 'DIV' && !node.dataset.fg && !node.dataset.bg;
+    let fg = inheritFg, bg = inheritBg;
+    if (node.dataset.fg) fg = node.dataset.fg;
+    if (node.dataset.bg) bg = node.dataset.bg;
+    let out = '';
+    for (const child of node.childNodes) out += nodeToAnsi(child, fg, bg);
+    return isBlock ? '\n' + out : out;
+  }
+  return '';
+}
+
+function buildAnsiString() {
+  let out = '';
+  for (const child of colorCanvas.childNodes) out += nodeToAnsi(child, null, null);
+  return out;
+}
+
+function copyAnsiBlock() {
+  const inner = buildAnsiString();
+  if (!inner.trim()) { flash('Add some text to the color editor first!'); return; }
+  const block = '```ansi\n' + inner + '\n```';
+  const btn = document.getElementById('color-copy-btn');
+  copyText(block, btn, '⎘ Copy ANSI Block');
+}
+
+// ================================================================
+// EVENTS
+// ================================================================
 editor.addEventListener('input', update);
 editor.addEventListener('keydown', e => {
-  // Tab inserts spaces
   if (e.key === 'Tab') {
     e.preventDefault();
-    const { start, end } = getEditorSelection();
-    const val = editor.value;
-    const newVal = val.slice(0, start) + '  ' + val.slice(end);
-    editor.value = newVal;
+    const { start, end } = getEditorSel();
+    editor.value = editor.value.slice(0, start) + '  ' + editor.value.slice(end);
     editor.setSelectionRange(start + 2, start + 2);
     update();
   }
@@ -980,6 +1015,54 @@ editor.addEventListener('keydown', e => {
 
 // Init
 update();
+
+// ================================================================
+// THEME SWITCHER
+// ================================================================
+const THEMES = {
+  dark:     { name: 'Dark',     swatch: '#313338' },
+  ash:      { name: 'Ash',      swatch: '#35373c' },
+  onyx:     { name: 'Onyx',     swatch: '#1e1f22' },
+  midnight: { name: 'Midnight', swatch: '#121212' },
+  light:    { name: 'Light',    swatch: '#ebedef' },
+};
+
+function setTheme(theme) {
+  document.body.setAttribute('data-theme', theme);
+  // Update button label + swatch
+  document.getElementById('active-theme-name').textContent = THEMES[theme].name;
+  document.getElementById('active-swatch').style.background = THEMES[theme].swatch;
+  // Update checkmarks
+  document.querySelectorAll('.theme-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.theme === theme);
+  });
+  closeThemeDropdown();
+  localStorage.setItem('discord-editor-theme', theme);
+}
+
+function toggleThemeDropdown() {
+  const dd = document.getElementById('theme-dropdown');
+  const btn = document.getElementById('theme-btn');
+  const isOpen = dd.classList.contains('open');
+  if (isOpen) { closeThemeDropdown(); } else { dd.classList.add('open'); btn.classList.add('open'); }
+}
+
+function closeThemeDropdown() {
+  document.getElementById('theme-dropdown').classList.remove('open');
+  document.getElementById('theme-btn').classList.remove('open');
+}
+
+// Close on outside click
+document.addEventListener('click', e => {
+  if (!document.getElementById('theme-switcher').contains(e.target)) closeThemeDropdown();
+});
+
+// Restore saved theme on load
+(function() {
+  const saved = localStorage.getItem('discord-editor-theme') || 'dark';
+  if (saved !== 'dark') setTheme(saved);
+})();
+
 </script>
 </body>
 </html>
