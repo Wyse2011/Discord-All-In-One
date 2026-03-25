@@ -482,6 +482,208 @@
   .theme-swatch-large .sw-right { flex: 1; }
   .theme-check { visibility: hidden; font-size: 11px; margin-left: auto; color: var(--brand); }
   .theme-desc { font-size: 9px; color: var(--text-muted); font-weight: 400; letter-spacing: 0; }
+
+  /* ===== MOBILE TAB BAR ===== */
+  #mobile-tab-bar {
+    display: none;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    flex-direction: row;
+    z-index: 100;
+  }
+
+  .mob-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'Chakra Petch', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 10px 4px 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    transition: color 0.15s, background 0.15s;
+    border-top: 2px solid transparent;
+  }
+  .mob-tab:hover { background: var(--surface); color: var(--interactive-normal); }
+  .mob-tab.active { color: var(--brand); border-top-color: var(--brand); }
+  .mob-tab-icon { font-size: 16px; line-height: 1; }
+
+  /* ===== MOBILE TOOLBAR COLLAPSE ===== */
+  #mobile-toolbar-toggle {
+    display: none;
+    width: 100%;
+    background: var(--bg-modifier);
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'Chakra Petch', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    cursor: pointer;
+    text-align: left;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* ===== RESPONSIVE: MOBILE BREAKPOINT ===== */
+  @media (max-width: 680px) {
+    /* Hide desktop footer */
+    #footer { display: none; }
+
+    /* Topbar: collapse toolbar groups into a scrollable strip */
+    #topbar {
+      padding: 8px 10px 0;
+    }
+    #topbar-row1 {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      gap: 6px;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    #topbar-row1::-webkit-scrollbar { display: none; }
+
+    .app-title { font-size: 12px; }
+    .divider-v { display: none; }
+    .group-label { display: none; }
+    .toolbar-group { gap: 1px; padding: 2px; }
+    .btn { font-size: 12px; padding: 5px 7px; }
+
+    /* Theme switcher: compact */
+    #theme-switcher-label { display: none; }
+    #theme-btn { font-size: 11px; padding: 4px 8px; }
+    #active-theme-name { display: none; }
+
+    /* Plan row: scrollable */
+    #plan-row {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 6px 0 8px;
+    }
+    #plan-row::-webkit-scrollbar { display: none; }
+    .char-counter { font-size: 11px; white-space: nowrap; }
+
+    /* Body: allow scroll instead of overflow:hidden */
+    body {
+      overflow: auto;
+      height: 100dvh;
+    }
+
+    /* Main layout: single-column tabbed panels */
+    #main-layout {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* TOP PANELS: show as single tab */
+    #top-panels {
+      display: block;
+      height: 100%;
+    }
+
+    .panel {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      border-right: none !important;
+    }
+    .panel.mob-active { display: flex; }
+
+    /* Bigger editor textarea on mobile */
+    #editor {
+      font-size: 15px;
+      padding: 14px;
+      min-height: 200px;
+    }
+
+    /* BOTTOM SECTION: also tab-controlled */
+    #bottom-section {
+      display: none;
+      height: 100%;
+      border-top: none;
+    }
+    #bottom-section.mob-active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #color-panel {
+      display: none;
+      border-right: none;
+      flex: 1;
+      min-height: 0;
+    }
+    #color-panel.mob-active { display: flex; }
+
+    #output-panel {
+      display: none;
+      flex: 1;
+      min-height: 0;
+    }
+    #output-panel.mob-active { display: flex; }
+
+    /* Output chunks: stack vertically */
+    #output-scroll {
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .output-chunk {
+      width: 100%;
+    }
+
+    /* Color swatches: bigger touch targets */
+    .color-swatch {
+      width: 26px;
+      height: 26px;
+    }
+    .apply-btn {
+      font-size: 11px;
+      padding: 5px 11px;
+    }
+
+    /* Color canvas: taller on mobile */
+    #color-canvas {
+      min-height: 120px;
+    }
+
+    /* Show mobile tab bar */
+    #mobile-tab-bar { display: flex; }
+
+    /* Prevent tooltip overflow on mobile */
+    .btn[title]:hover::after { display: none; }
+    .color-swatch[title]:hover::after { display: none; }
+
+    /* Panel header: slightly more padding */
+    .panel-header {
+      font-size: 10px;
+      padding: 8px 12px;
+    }
+  }
+
+  /* Extra-small screens */
+  @media (max-width: 380px) {
+    .mob-tab { font-size: 9px; padding: 8px 2px 6px; }
+    .mob-tab-icon { font-size: 14px; }
+    .btn { font-size: 11px; padding: 4px 5px; }
+    .plan-btn { padding: 3px 10px; font-size: 11px; }
+  }
 </style>
 </head>
 <body>
@@ -672,6 +874,26 @@
 
   </div><!-- end bottom-section -->
 </div><!-- end main-layout -->
+
+<!-- MOBILE TAB BAR -->
+<div id="mobile-tab-bar">
+  <button class="mob-tab active" id="tab-editor" onclick="mobileTab('editor')">
+    <span class="mob-tab-icon">✏️</span>
+    Editor
+  </button>
+  <button class="mob-tab" id="tab-preview" onclick="mobileTab('preview')">
+    <span class="mob-tab-icon">👁</span>
+    Preview
+  </button>
+  <button class="mob-tab" id="tab-color" onclick="mobileTab('color')">
+    <span class="mob-tab-icon">🎨</span>
+    Colors
+  </button>
+  <button class="mob-tab" id="tab-output" onclick="mobileTab('output')">
+    <span class="mob-tab-icon">📋</span>
+    Output
+  </button>
+</div>
 
 <div id="footer">
   <span>⌨ Markdown editor top-left</span>
@@ -1061,6 +1283,69 @@ document.addEventListener('click', e => {
 (function() {
   const saved = localStorage.getItem('discord-editor-theme') || 'dark';
   if (saved !== 'dark') setTheme(saved);
+})();
+
+// ================================================================
+// MOBILE TAB NAVIGATION
+// ================================================================
+let currentMobileTab = 'editor';
+
+function mobileTab(tab) {
+  currentMobileTab = tab;
+
+  // Update tab button states
+  document.querySelectorAll('.mob-tab').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.getElementById('tab-' + tab);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  const editorPanel  = document.querySelector('#top-panels .panel:first-child');
+  const previewPanel = document.querySelector('#top-panels .panel:last-child');
+  const bottomSec    = document.getElementById('bottom-section');
+  const colorPanel   = document.getElementById('color-panel');
+  const outputPanel  = document.getElementById('output-panel');
+
+  // Hide everything
+  editorPanel.classList.remove('mob-active');
+  previewPanel.classList.remove('mob-active');
+  bottomSec.classList.remove('mob-active');
+  colorPanel.classList.remove('mob-active');
+  outputPanel.classList.remove('mob-active');
+
+  // Show the selected tab
+  if (tab === 'editor') {
+    editorPanel.classList.add('mob-active');
+  } else if (tab === 'preview') {
+    previewPanel.classList.add('mob-active');
+  } else if (tab === 'color') {
+    bottomSec.classList.add('mob-active');
+    colorPanel.classList.add('mob-active');
+  } else if (tab === 'output') {
+    bottomSec.classList.add('mob-active');
+    outputPanel.classList.add('mob-active');
+  }
+}
+
+// Initialize mobile state on load
+(function() {
+  const isMobile = window.matchMedia('(max-width: 680px)').matches;
+  if (isMobile) {
+    mobileTab('editor');
+  }
+
+  // Re-apply on resize
+  window.addEventListener('resize', () => {
+    const mobile = window.matchMedia('(max-width: 680px)').matches;
+    if (mobile) {
+      mobileTab(currentMobileTab);
+    } else {
+      // Desktop: restore all panels visible
+      const panels = document.querySelectorAll('.panel');
+      panels.forEach(p => p.classList.remove('mob-active'));
+      document.getElementById('bottom-section').classList.remove('mob-active');
+      document.getElementById('color-panel').classList.remove('mob-active');
+      document.getElementById('output-panel').classList.remove('mob-active');
+    }
+  });
 })();
 
 </script>
