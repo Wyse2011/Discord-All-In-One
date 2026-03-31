@@ -256,10 +256,37 @@
     border-top: 2px solid var(--border);
     flex-shrink: 0;
     height: 240px;
+    transition: height 0.2s ease;
+    overflow: hidden;
   }
 
-  /* ===== ANSI COLOR EDITOR ===== */
+  /* ===== BOTTOM PANEL MODE SELECTOR ===== */
   #color-panel { display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--border); background: var(--bg-secondary); }
+
+  .panel-mode-selector {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--bg-modifier); padding: 5px 10px;
+    border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .panel-mode-selector .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  #bottom-panel-dropdown {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-normal); font-family: 'Chakra Petch', monospace;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; padding: 3px 8px; border-radius: 4px;
+    cursor: pointer; outline: none; transition: border-color 0.15s;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 7px center;
+    padding-right: 22px;
+  }
+  #bottom-panel-dropdown:hover, #bottom-panel-dropdown:focus { border-color: var(--brand); }
+  #bottom-panel-dropdown option { background: var(--bg-secondary); }
+
+  /* subpanels */
+  #color-content, #font-content { display: flex; flex-direction: column; flex: 1; overflow: hidden; min-height: 0; }
+
+  /* ===== ANSI COLOR EDITOR ===== */
 
   #color-toolbar {
     padding: 6px 10px 7px;
@@ -341,6 +368,78 @@
   .color-hint { font-size: 10px; color: var(--text-muted); font-family: 'Fira Code', monospace; line-height: 1.4; }
   .color-hint code { background: #1a1b1e; padding: 1px 4px; border-radius: 3px; font-size: 10px; }
   #flash-msg { font-size: 11px; font-weight: 700; color: var(--yellow); display: none; margin-left: 4px; }
+
+  /* ===== FONT PANEL ===== */
+  #font-content { background: var(--bg-secondary); }
+  #font-toolbar {
+    padding: 6px 10px 7px;
+    background: var(--bg-modifier);
+    border-bottom: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;
+  }
+  .font-toolbar-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  #font-select {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-normal); font-size: 11px; font-weight: 600;
+    padding: 4px 24px 4px 8px; border-radius: 4px; cursor: pointer; outline: none;
+    transition: border-color 0.15s; font-family: 'Fira Code', monospace;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 7px center;
+    max-width: 230px;
+  }
+  #font-select:hover, #font-select:focus { border-color: var(--brand); }
+  #font-select option { background: var(--bg-secondary); }
+  .font-apply-btn {
+    border: none; border-radius: 4px; font-family: 'Chakra Petch', monospace;
+    font-size: 10px; font-weight: 700; padding: 4px 10px; cursor: pointer;
+    letter-spacing: 0.04em; transition: opacity 0.12s; white-space: nowrap; color: #fff;
+    background: linear-gradient(135deg, #d33682, #6c71c4);
+  }
+  .font-apply-btn:hover { opacity: 0.85; }
+  .font-clear-btn {
+    background: var(--surface); color: var(--interactive-normal); border: 1px solid var(--border);
+  }
+  .font-clear-btn:hover { background: var(--surface-hover); color: var(--header-primary); }
+  .font-preview-label {
+    font-size: 10px; color: var(--text-muted); font-family: 'Fira Code', monospace;
+    margin-left: auto; white-space: nowrap;
+  }
+  #font-preview-sample {
+    font-size: 16px; letter-spacing: 0.03em; color: var(--header-primary);
+    min-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  #font-canvas {
+    flex: 1; background: var(--canvas-bg); border: none; outline: none;
+    color: var(--canvas-text); font-family: 'Fira Code', monospace;
+    font-size: 13px; line-height: 1.65; padding: 10px 14px;
+    overflow-y: auto; white-space: pre-wrap; word-break: break-word;
+    cursor: text; min-height: 0; resize: none;
+  }
+  #font-canvas::placeholder { color: #4f545c; }
+  #font-canvas::-webkit-scrollbar { width: 6px; }
+  #font-canvas::-webkit-scrollbar-track { background: var(--scrollbar); }
+  #font-canvas::-webkit-scrollbar-thumb { background: var(--surface); border-radius: 4px; }
+  #font-output-row {
+    padding: 6px 10px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg-tertiary); flex-shrink: 0;
+  }
+  #font-copy-btn {
+    background: var(--brand); border: none; color: #fff;
+    font-family: 'Chakra Petch', monospace; font-size: 11px; font-weight: 700;
+    padding: 5px 13px; border-radius: 5px; cursor: pointer;
+    letter-spacing: 0.04em; transition: background 0.12s; flex-shrink: 0;
+    white-space: nowrap;
+  }
+  #font-copy-btn:hover { background: var(--brand-hover); }
+  #font-copy-btn.copied { background: var(--green); }
+  #font-converted-output {
+    flex: 1; font-size: 13px; color: var(--text-normal);
+    font-family: 'Fira Code', monospace; word-break: break-word;
+    line-height: 1.5; max-height: 38px; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap;
+  }
 
   /* ===== OUTPUT PANEL ===== */
   #output-panel { display: flex; flex-direction: column; overflow: hidden; background: var(--bg-secondary); }
@@ -798,68 +897,171 @@
   <!-- BOTTOM: ANSI Color Editor + Output Segments -->
   <div id="bottom-section">
 
-    <!-- ANSI Color Editor -->
+    <!-- Bottom-Left Panel with dropdown toggle -->
     <div id="color-panel">
-      <div class="panel-header">
+
+      <!-- Dropdown Mode Selector -->
+      <div class="panel-mode-selector">
         <span class="dot dot-color"></span>
-        ANSI Color Editor
-        <span style="font-size:9px;color:var(--text-muted);font-weight:400;margin-left:2px;">— desktop Discord only, inside ```ansi blocks</span>
+        <select id="bottom-panel-dropdown" onchange="switchBottomPanel(this.value)">
+          <option value="hidden">Hidden</option>
+          <option value="color" selected>ANSI Color Editor</option>
+          <option value="font">Custom Text &amp; Fonts</option>
+        </select>
+        <span id="bottom-panel-hint" style="font-size:9px;color:var(--text-muted);font-weight:400;"></span>
       </div>
 
-      <div id="color-toolbar">
+      <!-- ── COLOR SUBPANEL ── -->
+      <div id="color-content">
+        <div id="color-toolbar">
+          <!-- FG Row -->
+          <div class="color-row">
+            <span class="color-row-label">FG</span>
+            <div class="color-swatch active-color" id="fg-30" style="background:#4f545c" title="Gray (30)"   data-type="fg" data-code="30" onclick="selectColor(this)"></div>
+            <div class="color-swatch"              id="fg-31" style="background:#dc322f" title="Red (31)"    data-type="fg" data-code="31" onclick="selectColor(this)"></div>
+            <div class="color-swatch"              id="fg-32" style="background:#859900" title="Green (32)"  data-type="fg" data-code="32" onclick="selectColor(this)"></div>
+            <div class="color-swatch"              id="fg-33" style="background:#b58900" title="Yellow (33)" data-type="fg" data-code="33" onclick="selectColor(this)"></div>
+            <div class="color-swatch"              id="fg-34" style="background:#268bd2" title="Blue (34)"   data-type="fg" data-code="34" onclick="selectColor(this)"></div>
+            <div class="color-swatch"              id="fg-35" style="background:#d33682" title="Pink (35)"   data-type="fg" data-code="35" onclick="selectColor(this)"></div>
+            <div class="color-swatch"              id="fg-36" style="background:#2aa198" title="Cyan (36)"   data-type="fg" data-code="36" onclick="selectColor(this)"></div>
+            <div class="color-swatch"              id="fg-37" style="background:#ffffff;border-color:#555" title="White (37)"  data-type="fg" data-code="37" onclick="selectColor(this)"></div>
+            <div class="color-divider"></div>
+            <button class="apply-btn apply-fg" onmousedown="preventBlur(event)" onclick="applyColor('fg')">Apply FG</button>
+            <div class="sel-preview">
+              <span style="color:var(--text-muted)">FG</span>
+              <span class="sel-dot" id="fg-preview" style="background:#4f545c" title="Selected FG"></span>
+              <span style="color:var(--text-muted)">BG</span>
+              <span class="sel-dot" id="bg-preview" style="background:transparent;border-style:dashed" title="Selected BG"></span>
+            </div>
+          </div>
+          <!-- BG Row -->
+          <div class="color-row">
+            <span class="color-row-label">BG</span>
+            <div class="color-swatch active-color" id="bg-none" style="background:transparent;border:2px dashed #555" title="No BG" data-type="bg" data-code="none" onclick="selectColor(this)"></div>
+            <div class="color-swatch" id="bg-40" style="background:#002b36" title="Dark Blue (40)"    data-type="bg" data-code="40" onclick="selectColor(this)"></div>
+            <div class="color-swatch" id="bg-41" style="background:#cb4b16" title="Orange (41)"       data-type="bg" data-code="41" onclick="selectColor(this)"></div>
+            <div class="color-swatch" id="bg-42" style="background:#586e75" title="Gray (42)"         data-type="bg" data-code="42" onclick="selectColor(this)"></div>
+            <div class="color-swatch" id="bg-43" style="background:#657b83" title="Light Gray (43)"   data-type="bg" data-code="43" onclick="selectColor(this)"></div>
+            <div class="color-swatch" id="bg-44" style="background:#839496" title="Lighter Gray (44)" data-type="bg" data-code="44" onclick="selectColor(this)"></div>
+            <div class="color-swatch" id="bg-45" style="background:#6c71c4" title="Indigo (45)"       data-type="bg" data-code="45" onclick="selectColor(this)"></div>
+            <div class="color-swatch" id="bg-46" style="background:#93a1a1" title="Pale Blue (46)"    data-type="bg" data-code="46" onclick="selectColor(this)"></div>
+            <div class="color-swatch" id="bg-47" style="background:#fdf6e3;border-color:#555" title="White (47)" data-type="bg" data-code="47" onclick="selectColor(this)"></div>
+            <div class="color-divider"></div>
+            <button class="apply-btn apply-bg"  onmousedown="preventBlur(event)" onclick="applyColor('bg')">Apply BG</button>
+            <button class="apply-btn clear-btn" onmousedown="preventBlur(event)" onclick="clearColors()" style="margin-left:3px;">✕ Clear</button>
+          </div>
+        </div><!-- end color-toolbar -->
 
-        <!-- FG Row -->
-        <div class="color-row">
-          <span class="color-row-label">FG</span>
-          <!-- 8 foreground swatches -->
-          <div class="color-swatch active-color" id="fg-30" style="background:#4f545c" title="Gray (30)"   data-type="fg" data-code="30" onclick="selectColor(this)"></div>
-          <div class="color-swatch"              id="fg-31" style="background:#dc322f" title="Red (31)"    data-type="fg" data-code="31" onclick="selectColor(this)"></div>
-          <div class="color-swatch"              id="fg-32" style="background:#859900" title="Green (32)"  data-type="fg" data-code="32" onclick="selectColor(this)"></div>
-          <div class="color-swatch"              id="fg-33" style="background:#b58900" title="Yellow (33)" data-type="fg" data-code="33" onclick="selectColor(this)"></div>
-          <div class="color-swatch"              id="fg-34" style="background:#268bd2" title="Blue (34)"   data-type="fg" data-code="34" onclick="selectColor(this)"></div>
-          <div class="color-swatch"              id="fg-35" style="background:#d33682" title="Pink (35)"   data-type="fg" data-code="35" onclick="selectColor(this)"></div>
-          <div class="color-swatch"              id="fg-36" style="background:#2aa198" title="Cyan (36)"   data-type="fg" data-code="36" onclick="selectColor(this)"></div>
-          <div class="color-swatch"              id="fg-37" style="background:#ffffff;border-color:#555" title="White (37)"  data-type="fg" data-code="37" onclick="selectColor(this)"></div>
-          <div class="color-divider"></div>
-          <button class="apply-btn apply-fg" onmousedown="preventBlur(event)" onclick="applyColor('fg')">Apply FG</button>
-          <div class="sel-preview">
-            <span style="color:var(--text-muted)">FG</span>
-            <span class="sel-dot" id="fg-preview" style="background:#4f545c" title="Selected FG"></span>
-            <span style="color:var(--text-muted)">BG</span>
-            <span class="sel-dot" id="bg-preview" style="background:transparent;border-style:dashed" title="Selected BG"></span>
+        <div id="color-canvas" contenteditable="true" spellcheck="true"></div>
+
+        <div id="color-output-row">
+          <button id="color-copy-btn" onclick="copyAnsiBlock()">⎘ Copy ANSI Block</button>
+          <span class="color-hint">Outputs a <code>```ansi```</code> block · paste directly into Discord desktop</span>
+          <span id="flash-msg"></span>
+        </div>
+      </div><!-- end color-content -->
+
+      <!-- ── FONT SUBPANEL ── -->
+      <div id="font-content" style="display:none;">
+        <div id="font-toolbar">
+          <div class="font-toolbar-row">
+            <select id="font-select" onchange="updateFontPreview()">
+              <optgroup label="── Math / Unicode ──">
+                <option value="bold_serif">𝐁𝐨𝐥𝐝 𝐒𝐞𝐫𝐢𝐟</option>
+                <option value="italic_serif">𝐼𝑡𝑎𝑙𝑖𝑐 𝑆𝑒𝑟𝑖𝑓</option>
+                <option value="bold_italic_serif">𝑩𝒐𝒍𝒅 𝑰𝒕𝒂𝒍𝒊𝒄 𝑺𝒆𝒓𝒊𝒇</option>
+                <option value="script">𝒮𝒸𝓇𝒾𝓅𝓉 / Cursive</option>
+                <option value="bold_script">𝓑𝓸𝓵𝓭 𝓢𝓬𝓻𝓲𝓹𝓽</option>
+                <option value="fraktur">𝔉𝔯𝔞𝔨𝔱𝔲𝔯 / Gothic</option>
+                <option value="bold_fraktur">𝕭𝖔𝖑𝖉 𝕱𝖗𝖆𝖐𝖙𝖚𝖗</option>
+                <option value="double_struck">𝔻𝕠𝕦𝕓𝕝𝕖 𝕊𝕥𝕣𝕦𝕔𝕜</option>
+                <option value="sans">𝖲𝖺𝗇𝗌-𝖲𝖾𝗋𝗂𝖿</option>
+                <option value="bold_sans">𝗕𝗼𝗹𝗱 𝗦𝗮𝗻𝘀</option>
+                <option value="italic_sans">𝘐𝘵𝘢𝘭𝘪𝘤 𝘚𝘢𝘯𝘴</option>
+                <option value="bold_italic_sans">𝘽𝙤𝙡𝙙 𝙄𝙩𝙖𝙡𝙞𝙘 𝙎𝙖𝙣𝙨</option>
+                <option value="monospace">𝙼𝚘𝚗𝚘𝚜𝚙𝚊𝚌𝚎</option>
+                <option value="fullwidth">Ｆｕｌｌｗｉｄｔｈ</option>
+              </optgroup>
+              <optgroup label="── Special Alphabets ──">
+                <option value="superscript">ˢᵘᵖᵉʳˢᶜʳⁱᵖᵗ</option>
+                <option value="subscript">ₛᵤᵦₛᶜᵣᵢₚₜ</option>
+                <option value="small_caps">Sᴍᴀʟʟ Cᴀᴘs</option>
+                <option value="upside_down">upsıpǝ poʍu</option>
+                <option value="reverse">Reverse text</option>
+                <option value="weird">Wᵉⁱʳᵈ Classic</option>
+                <option value="haxxor">|-|4××0r Leet</option>
+                <option value="claudio">Cl4ud!0 Style</option>
+                <option value="small_wave">aLtErNaTiNg</option>
+              </optgroup>
+              <optgroup label="── Named Styles ──">
+                <option value="venus">Venus — Cursive</option>
+                <option value="bella">Bella — Italic</option>
+                <option value="alissa">Alissa — Script</option>
+                <option value="ozana">Ozana — Bold Gothic</option>
+                <option value="constantine">Constantine — Bold</option>
+                <option value="livia">Livia — Bold Italic</option>
+                <option value="catarina">Catarina — Uppercase</option>
+                <option value="mango">Mango — Mono</option>
+              </optgroup>
+              <optgroup label="── Bubble &amp; Boxed ──">
+                <option value="bubble">Ⓑⓤⓑⓑⓛⓔ Letters</option>
+                <option value="bubble_bold">🅑🅛🅐🅒🅚 Bubble</option>
+                <option value="boxed">🄱🄾🅇🄴🄳 Classic</option>
+                <option value="boxed_neg">🅱🅾🆇🅴🅳 Negative</option>
+                <option value="circled">Ⓒⓘⓡⓒⓛⓔⓓ</option>
+                <option value="neg_squared">🅽🅴🅶 🆂🆀🆄🅰🆁🅴🅳</option>
+                <option value="egypt">🇫🇱🇦🇬 Regional</option>
+              </optgroup>
+              <optgroup label="── Lines &amp; Accents ──">
+                <option value="strike">S̶t̶r̶i̶k̶e̶t̶h̶r̶o̶u̶g̶h̶</option>
+                <option value="strike_bold">S̶̶t̶̶r̶̶i̶̶k̶̶e̶̶ Bold</option>
+                <option value="double_strike">D̶̲o̶̲u̶̲b̶̲l̶̲e̶̲ Strike</option>
+                <option value="underline">U̲n̲d̲e̲r̲l̲i̲n̲e̲</option>
+                <option value="underline_double">U͇n͇d͇e͇r͇ Double</option>
+                <option value="underline_bold">U̳n̳d̳e̳r̳ Bold</option>
+                <option value="underline_dotted">Ṳn̤d̤e̤r̤ Dotted</option>
+                <option value="overline">O̅v̅e̅r̅l̅i̅n̅e̅</option>
+                <option value="overline_wave">Ñ Overline Wave</option>
+                <option value="smoke">S̃m̃õkẽ Wave</option>
+                <option value="sparkle">S̈p̈ä̈r̈k̈l̈ë Dots</option>
+                <option value="accent_light">Ȧċċėṅṱ Light</option>
+                <option value="accent_med">Ä̤c̈c̣ȩṅṱ Med</option>
+                <option value="accent_max">Ä̤c̈c̤ȩṅṱ Max</option>
+              </optgroup>
+              <optgroup label="── Zalgo / Glitch ──">
+                <option value="zalgo_light">Zalgo Light</option>
+                <option value="zalgo_medium">Zalgo Medium</option>
+                <option value="zalgo_heavy">Zalgo Heavy</option>
+              </optgroup>
+              <optgroup label="── Love &amp; Decorative ──">
+                <option value="love_hearts">L♡v♡e♡ Hearts</option>
+                <option value="love_bold">L❤v❤e❤ Bold Hearts</option>
+                <option value="love_sparkle">✨ Sparkle Wrap ✨</option>
+                <option value="love_arrow">→ Arrow Wrap ←</option>
+                <option value="love_box">[ Box Wrap ]</option>
+                <option value="aesthetic">「 Aesthetic 」</option>
+                <option value="stars_wrap">★ Stars Wrap ★</option>
+                <option value="flowers">✿ Flowers ✿</option>
+                <option value="clouds">☁ Clouds ☁</option>
+                <option value="sparkles_wrap">✦ Sparkles ✦</option>
+                <option value="wave_wrap">〜 Wave Wrap 〜</option>
+              </optgroup>
+            </select>
+            <button class="font-apply-btn" onclick="convertFontText()">✦ Convert</button>
+            <button class="font-apply-btn font-clear-btn" onclick="clearFontPanel()">✕ Clear</button>
+            <span class="font-preview-label">Preview: <span id="font-preview-sample">Abc</span></span>
           </div>
         </div>
 
-        <!-- BG Row -->
-        <div class="color-row">
-          <span class="color-row-label">BG</span>
-          <!-- "None" swatch + 8 background swatches -->
-          <div class="color-swatch active-color" id="bg-none" style="background:transparent;border:2px dashed #555" title="No BG" data-type="bg" data-code="none" onclick="selectColor(this)"></div>
-          <div class="color-swatch" id="bg-40" style="background:#002b36" title="Dark Blue (40)"    data-type="bg" data-code="40" onclick="selectColor(this)"></div>
-          <div class="color-swatch" id="bg-41" style="background:#cb4b16" title="Orange (41)"       data-type="bg" data-code="41" onclick="selectColor(this)"></div>
-          <div class="color-swatch" id="bg-42" style="background:#586e75" title="Gray (42)"         data-type="bg" data-code="42" onclick="selectColor(this)"></div>
-          <div class="color-swatch" id="bg-43" style="background:#657b83" title="Light Gray (43)"   data-type="bg" data-code="43" onclick="selectColor(this)"></div>
-          <div class="color-swatch" id="bg-44" style="background:#839496" title="Lighter Gray (44)" data-type="bg" data-code="44" onclick="selectColor(this)"></div>
-          <div class="color-swatch" id="bg-45" style="background:#6c71c4" title="Indigo (45)"       data-type="bg" data-code="45" onclick="selectColor(this)"></div>
-          <div class="color-swatch" id="bg-46" style="background:#93a1a1" title="Pale Blue (46)"    data-type="bg" data-code="46" onclick="selectColor(this)"></div>
-          <div class="color-swatch" id="bg-47" style="background:#fdf6e3;border-color:#555" title="White (47)" data-type="bg" data-code="47" onclick="selectColor(this)"></div>
-          <div class="color-divider"></div>
-          <button class="apply-btn apply-bg"  onmousedown="preventBlur(event)" onclick="applyColor('bg')">Apply BG</button>
-          <button class="apply-btn clear-btn" onmousedown="preventBlur(event)" onclick="clearColors()" style="margin-left:3px;">✕ Clear</button>
+        <textarea id="font-canvas" placeholder="Type your text here, then click Convert…" oninput="updateFontPreview()"></textarea>
+
+        <div id="font-output-row">
+          <button id="font-copy-btn" onclick="copyFontText()">⎘ Copy</button>
+          <span id="font-converted-output" style="color:var(--text-muted);font-style:italic;font-size:11px;">Converted text appears here</span>
         </div>
+      </div><!-- end font-content -->
 
-      </div><!-- end color-toolbar -->
-
-      <!-- The rich-text canvas where colors are applied visually -->
-      <div id="color-canvas" contenteditable="true" spellcheck="true"></div>
-
-      <!-- Copy button row -->
-      <div id="color-output-row">
-        <button id="color-copy-btn" onclick="copyAnsiBlock()">⎘ Copy ANSI Block</button>
-        <span class="color-hint">Outputs a <code>```ansi```</code> block · paste directly into Discord desktop</span>
-        <span id="flash-msg"></span>
-      </div>
-    </div>
+    </div><!-- end color-panel -->
 
     <!-- Segment Output -->
     <div id="output-panel">
@@ -887,7 +1089,7 @@
   </button>
   <button class="mob-tab" id="tab-color" onclick="mobileTab('color')">
     <span class="mob-tab-icon">🎨</span>
-    Colors
+    Colors/Fonts
   </button>
   <button class="mob-tab" id="tab-output" onclick="mobileTab('output')">
     <span class="mob-tab-icon">📋</span>
@@ -898,7 +1100,7 @@
 <div id="footer">
   <span>⌨ Markdown editor top-left</span>
   <span>|</span>
-  <span>Color editor: type → highlight → pick color → Apply FG/BG</span>
+  <span>Color/Font editor: use dropdown → choose mode</span>
   <span>|</span>
   <span>ANSI colors only render on Discord desktop/browser</span>
 </div>
@@ -1324,6 +1526,356 @@ function mobileTab(tab) {
     outputPanel.classList.add('mob-active');
   }
 }
+
+// ================================================================
+// BOTTOM PANEL DROPDOWN
+// ================================================================
+function switchBottomPanel(mode) {
+  const colorContent = document.getElementById('color-content');
+  const fontContent  = document.getElementById('font-content');
+  const hint         = document.getElementById('bottom-panel-hint');
+  const bottomSection = document.getElementById('bottom-section');
+
+  colorContent.style.display = 'none';
+  fontContent.style.display  = 'none';
+
+  if (mode === 'hidden') {
+    bottomSection.style.height = '38px'; // just show the header bar
+    hint.textContent = '';
+  } else {
+    bottomSection.style.height = '240px';
+    if (mode === 'color') {
+      colorContent.style.display = 'flex';
+      hint.textContent = '— desktop Discord only, inside ```ansi blocks';
+    } else if (mode === 'font') {
+      fontContent.style.display = 'flex';
+      hint.textContent = '— Unicode font converter, works everywhere';
+      updateFontPreview();
+    }
+  }
+}
+
+// ================================================================
+// UNICODE FONT CONVERTER
+// ================================================================
+// ── Helper: build char→char map from parallel arrays/strings ──
+const FONT_MAPS = (function() {
+  const az  = [...'abcdefghijklmnopqrstuvwxyz'];
+  const AZ  = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+  const N09 = [...'0123456789'];
+
+  function makeMap(lower, upper, digits) {
+    const m = {};
+    const lo = lower ? [...lower] : null;
+    const up = upper ? [...upper] : null;
+    const di = digits ? [...digits] : null;
+    for (let i = 0; i < 26; i++) {
+      if (lo) m[az[i]] = lo[i];
+      if (up) m[AZ[i]] = up[i];
+    }
+    if (di) for (let i = 0; i < 10; i++) m[N09[i]] = di[i];
+    return m;
+  }
+
+  // Combiner-style: wraps each char with Unicode combining diacritics
+  function combiner(above='', below='') {
+    return { _type:'combiner', above, below };
+  }
+  // Wrap-style: prefix + suffix around whole string
+  function wrapper(pre='', suf='') {
+    return { _type:'wrapper', pre, suf };
+  }
+  // Per-char suffix
+  function perSuffix(suf) {
+    return { _type:'perSuffix', suf };
+  }
+  // Zalgo: random combining chaos
+  function zalgo(intensity=1) {
+    return { _type:'zalgo', intensity };
+  }
+
+  return {
+    // ══════════════════════════════════════════
+    // MATH / UNICODE ALPHABETS
+    // ══════════════════════════════════════════
+    bold_serif:        makeMap('𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳','𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙','𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗'),
+    italic_serif:      makeMap('𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧','𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍',null),
+    bold_italic_serif: makeMap('𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛','𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁',null),
+    script:            makeMap('𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏','𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',null),
+    bold_script:       makeMap('𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃','𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',null),
+    fraktur:           makeMap('𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷','𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',null),
+    bold_fraktur:      makeMap('𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟','𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',null),
+    double_struck:     makeMap('𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫','𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ','𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡'),
+    sans:              makeMap('𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓','𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹','𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫'),
+    bold_sans:         makeMap('𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇','𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭','𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵'),
+    italic_sans:       makeMap('𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻','𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡',null),
+    bold_italic_sans:  makeMap('𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯','𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕',null),
+    monospace:         makeMap('𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣','𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉','𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿'),
+    fullwidth: (() => {
+      const m = {};
+      const src = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'];
+      const dst = [...'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９'];
+      src.forEach((c,i) => m[c] = dst[i]);
+      return m;
+    })(),
+
+    // ══════════════════════════════════════════
+    // SPECIAL ALPHABETS
+    // ══════════════════════════════════════════
+    circled:     makeMap('ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ','ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ','⓪①②③④⑤⑥⑦⑧⑨'),
+    squared:     makeMap('🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉',null,null),
+    neg_squared: makeMap('🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉',null,null),
+    bubble_black: makeMap('🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩',null,null),
+
+    superscript: (() => {
+      const m = {};
+      const src = [...'abcdefghijklmnoprstuvwxyz'];
+      const dst = [...'ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻ'];
+      src.forEach((c,i) => m[c] = dst[i]);
+      [...'0123456789'].forEach((c,i) => m[c] = [...'⁰¹²³⁴⁵⁶⁷⁸⁹'][i]);
+      return m;
+    })(),
+    subscript: (() => {
+      const m = {};
+      const src = [...'aehijklmnoprstuvx'];
+      const dst = [...'ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ'];
+      src.forEach((c,i) => m[c] = dst[i]);
+      [...'0123456789'].forEach((c,i) => m[c] = [...'₀₁₂₃₄₅₆₇₈₉'][i]);
+      return m;
+    })(),
+    small_caps: (() => {
+      const m = {};
+      const src = [...'abcdefghijklmnopqrstuvwxyz'];
+      const dst = [...'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢ'];
+      src.forEach((c,i) => m[c] = dst[i]);
+      return m;
+    })(),
+    upside_down: (() => {
+      const normal  = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'];
+      const flipped = [...'ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz∀𐐒ƆᗡƎℲפHIſʞ˥WNOdQɹS┴∩ΛMX⅄Z0ƖᄅƐㄣϛ9ㄥ86'];
+      const m = {};
+      normal.forEach((c,i) => m[c] = flipped[i]);
+      return m;
+    })(),
+
+    // ══════════════════════════════════════════
+    // NAMED / FANCY STYLES (from discord-fonts.com)
+    // ══════════════════════════════════════════
+    // Venus — soft italic script
+    venus: makeMap('𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃','𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',null),
+    // Bella — italic serif
+    bella: makeMap('𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻','𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡',null),
+    // Soft letters — using regional indicators style
+    soft: makeMap('ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ','ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ','０１２３４５６７８９'),
+    // Alissa — double-struck italic feel
+    alissa: makeMap('𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏','𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',null),
+    // Ozana — bold fraktur (fancy bold letters)
+    ozana: makeMap('𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟','𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',null),
+    // Constantine — bold sans
+    constantine: makeMap('𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇','𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭',null),
+    // Catarina — uppercase double-struck
+    catarina: makeMap(null,'𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ',null),
+    // Livia — italic bold serif
+    livia: makeMap('𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛','𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁',null),
+    // Mango — monospace
+    mango: makeMap('𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣','𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉',null),
+    // Batman — circled black letters
+    batman: makeMap('🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩',null,null),
+    // Hisoka — CJK-style look-alike (Lenticular brackets style)
+    hisoka: (() => {
+      const src = [...'abcdefghijklmnopqrstuvwxyz'];
+      const dst = [...'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ'];
+      const m = {};
+      src.forEach((c,i) => m[c] = dst[i]);
+      [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((c,i) => m[c] = [...'ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ'][i]);
+      return m;
+    })(),
+    // Egyptian / wide letters (enclosed alphanumeric supplement region indicators)
+    egypt: makeMap('🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿',null,null),
+    // Weird classic
+    weird: (() => {
+      const src  = [...'abcdefghijklmnopqrstuvwxyz'];
+      const dst  = [...'ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻ'];
+      const srcU = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+      const dstU = [...'ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᵠᴿˢᵀᵁᵛᵂˣʸᶻ'];
+      const m = {};
+      src.forEach((c,i)  => m[c] = dst[i]);
+      srcU.forEach((c,i) => m[c] = dstU[i]);
+      return m;
+    })(),
+    // Claudio — "leet" style using look-alike chars
+    claudio: (() => {
+      const leet = {a:'4',b:'ß',c:'¢',d:'Ð',e:'3',f:'ƒ',g:'9',h:'#',i:'!',j:'J',k:'K',l:'1',m:'m',n:'И',o:'0',p:'þ',q:'q',r:'Я',s:'5',t:'†',u:'µ',v:'√',w:'ш',x:'×',y:'¥',z:'2',A:'4',B:'ß',C:'¢',D:'Ð',E:'3',F:'ƒ',G:'9',H:'#',I:'!',J:'J',K:'K',L:'1',M:'M',N:'И',O:'0',P:'þ',Q:'Q',R:'Я',S:'5',T:'†',U:'µ',V:'√',W:'ш',X:'×',Y:'¥',Z:'2'};
+      return leet;
+    })(),
+
+    // ══════════════════════════════════════════
+    // BUBBLE / BOXED
+    // ══════════════════════════════════════════
+    bubble: makeMap('ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ','ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ','⓪①②③④⑤⑥⑦⑧⑨'),
+    bubble_bold: makeMap('🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩','🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩',null),
+    boxed: makeMap('🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉',null,null),
+    boxed_neg: makeMap('🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉',null,null),
+
+    // ══════════════════════════════════════════
+    // STRIKE / UNDERLINE / OVERLINE (combiner diacritics)
+    // ══════════════════════════════════════════
+    strike:             combiner('','̶'),
+    strike_bold:        combiner('','̶̶'),
+    double_strike:      combiner('','̶̲'),
+    underline:          combiner('','̲'),
+    underline_double:   combiner('','͇'),
+    underline_bold:     combiner('','̳'),
+    underline_dotted:   combiner('','̤'),
+    overline:           combiner('̄',''),
+    overline_double:    combiner('̈',''),
+    overline_wave:      combiner('̃',''),
+    // Smoke / wave above
+    smoke:              combiner('̃',''),
+    // Stars decoration
+    sparkle:            combiner('̈','̈'),
+    // Dots above+below
+    accent_light:       combiner('̇',''),
+    accent_med:         combiner('̈','̣'),
+    accent_max:         combiner('̈','̤'),
+    // Cute dotted up + down
+    dotted_ud:          combiner('̈','̤'),
+
+    // ══════════════════════════════════════════
+    // ZALGO
+    // ══════════════════════════════════════════
+    zalgo_light:  zalgo(1),
+    zalgo_medium: zalgo(2),
+    zalgo_heavy:  zalgo(3),
+
+    // ══════════════════════════════════════════
+    // LOVE / DECORATIVE WRAPPERS
+    // ══════════════════════════════════════════
+    love_hearts:    perSuffix('♡'),
+    love_bold:      perSuffix('❤'),
+    love_sparkle:   wrapper('✨ ',' ✨'),
+    love_arrow:     wrapper('→ ',' ←'),
+    love_box:       wrapper('[ ',' ]'),
+    aesthetic:      wrapper('「 ',' 」'),
+    stars_wrap:     wrapper('★ ',' ★'),
+    flowers:        wrapper('✿ ',' ✿'),
+    clouds:         wrapper('☁ ',' ☁'),
+    sparkles_wrap:  wrapper('✦ ',' ✦'),
+    wave_wrap:      wrapper('〜 ',' 〜'),
+
+    // ══════════════════════════════════════════
+    // OTHER / MISC
+    // ══════════════════════════════════════════
+    small_wave: (() => {
+      // alternates lower / upper case per char
+      return { _type:'alternate' };
+    })(),
+    haxxor: (() => {
+      const m = {a:'4',b:'8',c:'(',d:'|)',e:'3',f:'|=',g:'6',h:'|-|',i:'|',j:'_|',k:'|<',l:'1',m:'|\\/|',n:'|\\|',o:'0',p:'|>',q:'0,',r:'|2',s:'5',t:'7',u:'|_|',v:'\\/','w':'\\/\\/',x:'><',y:'`/',z:'2',A:'4',B:'8',C:'(',D:'|)',E:'3',F:'|=',G:'6',H:'|-|',I:'|',J:'_|',K:'|<',L:'1',M:'|\\/|',N:'|\\|',O:'0',P:'|>',Q:'0,',R:'|2',S:'5',T:'7',U:'|_|',V:'\\/','W':'\\/\\/',X:'><',Y:'`/',Z:'2'};
+      return m;
+    })(),
+    // Reverse
+    reverse: { _type:'reverse' },
+  };
+})();
+
+let lastFontConverted = '';
+
+// Zalgo combining marks
+const ZALGO_UP   = ['̍','̎','̄','̅','̿','̑','̆','̐','͒','͗','͑','̇','̈','̊','͂','̓','̈́','͊','͋','͌','̃','̂','̌','͐','̀','́','̋','̏','̒','̓','̔','̽','̉','ͣ','ͤ','ͥ','ͦ','ͧ','ͨ','ͩ','ͪ','ͫ','ͬ','ͭ','ͮ','ͯ','̾','͛','͆','̚'];
+const ZALGO_DOWN = ['̖','̗','̘','̙','̜','̝','̞','̟','̠','̤','̥','̦','̩','̪','̫','̬','̭','̮','̯','̰','̱','̲','̳','̹','̺','̻','̼','ͅ','͇','͈','͉','͍','͎','͓','͔','͕','͖','͙','͚','̣'];
+
+function zalgoChar(c, intensity) {
+  let s = c;
+  const numUp   = Math.floor(Math.random() * intensity * 4);
+  const numDown = Math.floor(Math.random() * intensity * 3);
+  for (let i = 0; i < numUp;   i++) s += ZALGO_UP[Math.floor(Math.random()*ZALGO_UP.length)];
+  for (let i = 0; i < numDown; i++) s += ZALGO_DOWN[Math.floor(Math.random()*ZALGO_DOWN.length)];
+  return s;
+}
+
+function convertText(text, fontKey) {
+  const def = FONT_MAPS[fontKey];
+  if (!def) return text;
+
+  // Special _type handling
+  if (def._type === 'reverse') {
+    return [...text].reverse().join('');
+  }
+  if (def._type === 'alternate') {
+    return [...text].map((c,i) => i%2===0 ? c.toLowerCase() : c.toUpperCase()).join('');
+  }
+  if (def._type === 'wrapper') {
+    return def.pre + text + def.suf;
+  }
+  if (def._type === 'perSuffix') {
+    return [...text].map(c => c === ' ' ? ' ' : c + def.suf).join('');
+  }
+  if (def._type === 'combiner') {
+    return [...text].map(c => {
+      if (c === ' ') return c;
+      return (def.above||'') + c + (def.below||'');
+    }).join('');
+  }
+  if (def._type === 'zalgo') {
+    return [...text].map(c => c === ' ' ? ' ' : zalgoChar(c, def.intensity)).join('');
+  }
+
+  // Plain char map
+  let chars = [...text].map(c => def[c] !== undefined ? def[c] : c);
+  if (fontKey === 'upside_down') chars.reverse();
+  return chars.join('');
+}
+
+function updateFontPreview() {
+  const fontKey = document.getElementById('font-select').value;
+  const sample = document.getElementById('font-preview-sample');
+  sample.textContent = convertText('Abc', fontKey);
+  // Also update output if there's text
+  const input = document.getElementById('font-canvas').value;
+  if (input) {
+    const converted = convertText(input, fontKey);
+    lastFontConverted = converted;
+    const out = document.getElementById('font-converted-output');
+    out.style.fontStyle = 'normal';
+    out.style.color = 'var(--text-normal)';
+    out.textContent = converted;
+  }
+}
+
+function convertFontText() {
+  const input = document.getElementById('font-canvas').value;
+  if (!input.trim()) return;
+  const fontKey = document.getElementById('font-select').value;
+  const converted = convertText(input, fontKey);
+  lastFontConverted = converted;
+  const out = document.getElementById('font-converted-output');
+  out.style.fontStyle = 'normal';
+  out.style.color = 'var(--text-normal)';
+  out.textContent = converted;
+}
+
+function clearFontPanel() {
+  document.getElementById('font-canvas').value = '';
+  lastFontConverted = '';
+  const out = document.getElementById('font-converted-output');
+  out.style.fontStyle = 'italic';
+  out.style.color = 'var(--text-muted)';
+  out.textContent = 'Converted text appears here';
+}
+
+function copyFontText() {
+  if (!lastFontConverted) { convertFontText(); }
+  if (!lastFontConverted) return;
+  const btn = document.getElementById('font-copy-btn');
+  copyText(lastFontConverted, btn, '⎘ Copy');
+}
+
+// Initialize font panel dropdown on page load
+(function initBottomPanelDropdown() {
+  // Set hint for the default "color" selection
+  document.getElementById('bottom-panel-hint').textContent = '— desktop Discord only, inside ```ansi blocks';
+})();
 
 // Initialize mobile state on load
 (function() {
