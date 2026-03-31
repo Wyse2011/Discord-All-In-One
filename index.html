@@ -803,12 +803,168 @@
     }
   }
 
+  /* ===== MOBILE COLOR & FONT IMPROVEMENTS ===== */
+  @media (max-width: 600px) {
+
+    /* --- COLOR TOOLBAR: stack rows, larger swatches, better spacing --- */
+    #color-toolbar {
+      padding: 10px 10px 8px;
+      gap: 10px;
+    }
+
+    .color-row {
+      flex-wrap: wrap;
+      gap: 7px;
+      row-gap: 8px;
+    }
+
+    .color-row-label {
+      width: 100%;
+      font-size: 10px;
+      margin-bottom: -2px;
+    }
+
+    .color-swatch {
+      width: 34px;
+      height: 34px;
+      border-radius: 6px;
+      border-width: 2.5px;
+    }
+    .color-swatch.active-color {
+      transform: scale(1.1);
+    }
+
+    /* Apply buttons: full-width row below swatches */
+    .color-row .apply-btn {
+      margin-top: 4px;
+      flex: 1;
+      min-width: 90px;
+      font-size: 13px;
+      padding: 9px 10px;
+      border-radius: 7px;
+    }
+
+    /* Move sel-preview to its own line */
+    .sel-preview {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 2px;
+      font-size: 11px;
+    }
+
+    /* Color canvas: taller, bigger text */
+    #color-canvas {
+      font-size: 15px;
+      padding: 14px 16px;
+      min-height: 160px;
+      line-height: 1.8;
+    }
+
+    /* Copy button: full width, bigger tap target */
+    #color-output-row {
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 12px;
+      align-items: stretch;
+    }
+    #color-copy-btn {
+      width: 100%;
+      font-size: 14px;
+      padding: 11px 16px;
+      text-align: center;
+    }
+    .color-hint {
+      font-size: 11px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* --- FONT PANEL: vertical stack instead of side-by-side --- */
+    #font-split {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      overflow: hidden;
+    }
+
+    #font-input-panel {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      max-height: 220px;
+    }
+
+    #font-canvas {
+      font-size: 16px;
+      padding: 14px 16px;
+      min-height: 90px;
+    }
+
+    #font-clear-row {
+      padding: 8px 14px;
+    }
+
+    #font-results-panel {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    #font-results-scroll {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .font-result-item {
+      padding: 11px 14px;
+      gap: 10px;
+    }
+
+    .font-result-label {
+      width: 90px;
+      font-size: 9px;
+    }
+
+    .font-result-text {
+      font-size: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .font-copy-item-btn {
+      font-size: 11px;
+      padding: 7px 12px;
+      border-radius: 6px;
+      min-width: 56px;
+      text-align: center;
+    }
+
+    /* Color & Font views need correct full-height display on mobile */
+    #view-color,
+    #view-font {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #view-color #color-content {
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
   /* Extra-small screens */
   @media (max-width: 380px) {
     .mob-tab { font-size: 9px; padding: 8px 2px 6px; }
     .mob-tab-icon { font-size: 14px; }
     .btn { font-size: 11px; padding: 4px 5px; }
     .plan-btn { padding: 3px 10px; font-size: 11px; }
+
+    .color-swatch { width: 28px; height: 28px; }
+    .color-row .apply-btn { font-size: 12px; padding: 8px 8px; }
+    .font-result-label { width: 70px; }
+    .font-result-text { font-size: 16px; }
+    .font-copy-item-btn { padding: 6px 9px; font-size: 10px; }
   }
 </style>
 </head>
@@ -1044,6 +1200,14 @@
   <button class="mob-tab" id="tab-output" onclick="mobileTab('output')">
     <span class="mob-tab-icon">📋</span>
     Output
+  </button>
+  <button class="mob-tab" id="tab-color" onclick="mobileTab('color')">
+    <span class="mob-tab-icon">🎨</span>
+    Colors
+  </button>
+  <button class="mob-tab" id="tab-font" onclick="mobileTab('font')">
+    <span class="mob-tab-icon">Aa</span>
+    Fonts
   </button>
 </div>
 
@@ -1450,10 +1614,40 @@ function mobileTab(tab) {
   const activeBtn = document.getElementById('tab-' + tab);
   if (activeBtn) activeBtn.classList.add('active');
 
-  // Only applies when in editor tool mode
-  const currentTool = document.getElementById('tool-dropdown').value;
-  if (currentTool !== 'editor') return;
+  // Handle color and font views directly (they're top-level views, not editor sub-panels)
+  const viewEditor = document.getElementById('view-editor');
+  const viewColor  = document.getElementById('view-color');
+  const viewFont   = document.getElementById('view-font');
 
+  if (tab === 'color') {
+    viewEditor.style.display = 'none';
+    viewColor.style.display  = 'flex';
+    viewFont.style.display   = 'none';
+    // Update dropdown to match
+    document.getElementById('tool-dropdown').value = 'color';
+    const hint = document.getElementById('tool-hint');
+    if (hint) hint.textContent = '— desktop Discord only, inside \`\`\`ansi blocks';
+    return;
+  }
+  if (tab === 'font') {
+    viewEditor.style.display = 'none';
+    viewColor.style.display  = 'none';
+    viewFont.style.display   = 'flex';
+    document.getElementById('tool-dropdown').value = 'font';
+    const hint = document.getElementById('tool-hint');
+    if (hint) hint.textContent = '— type text, browse all fonts & copy instantly';
+    if (!fontResultsBuilt) { buildFontResults(); fontResultsBuilt = true; }
+    updateFontResults();
+    return;
+  }
+
+  // For editor/preview/output tabs, show the editor view
+  viewEditor.style.display = 'flex';
+  viewColor.style.display  = 'none';
+  viewFont.style.display   = 'none';
+  document.getElementById('tool-dropdown').value = 'editor';
+
+  // Only applies when in editor tool mode
   const editorPanel  = document.querySelector('#top-panels .panel:first-child');
   const previewPanel2 = document.querySelector('#top-panels .panel:last-child');
   const outputPanel  = document.getElementById('output-panel');
@@ -1491,14 +1685,35 @@ function switchTool(tool) {
   if (tool === 'editor') {
     viewEditor.style.display = 'flex';
     hint.textContent = '— write & preview Discord markdown, split by plan limit';
+    // Sync mobile tab bar to current editor sub-tab
+    document.querySelectorAll('.mob-tab').forEach(b => b.classList.remove('active'));
+    const editorTabBtn = document.getElementById('tab-' + (currentMobileTab === 'color' || currentMobileTab === 'font' ? 'editor' : currentMobileTab));
+    if (editorTabBtn) editorTabBtn.classList.add('active');
+    // Restore editor panel state
+    const editorPanel = document.querySelector('#top-panels .panel:first-child');
+    const previewPanel2 = document.querySelector('#top-panels .panel:last-child');
+    const outputPanel = document.getElementById('output-panel');
+    editorPanel.classList.remove('mob-active');
+    previewPanel2.classList.remove('mob-active');
+    outputPanel.classList.remove('mob-active');
+    const restoreTab = (currentMobileTab === 'color' || currentMobileTab === 'font') ? 'editor' : currentMobileTab;
+    if (restoreTab === 'editor' || !restoreTab) editorPanel.classList.add('mob-active');
+    else if (restoreTab === 'preview') previewPanel2.classList.add('mob-active');
+    else if (restoreTab === 'output') outputPanel.classList.add('mob-active');
   } else if (tool === 'color') {
     viewColor.style.display = 'flex';
     hint.textContent = '— desktop Discord only, inside \`\`\`ansi blocks';
+    document.querySelectorAll('.mob-tab').forEach(b => b.classList.remove('active'));
+    const colorTab = document.getElementById('tab-color');
+    if (colorTab) colorTab.classList.add('active');
   } else if (tool === 'font') {
     viewFont.style.display = 'flex';
     hint.textContent = '— type text, browse all fonts & copy instantly';
     if (!fontResultsBuilt) { buildFontResults(); fontResultsBuilt = true; }
     updateFontResults();
+    document.querySelectorAll('.mob-tab').forEach(b => b.classList.remove('active'));
+    const fontTab = document.getElementById('tab-font');
+    if (fontTab) fontTab.classList.add('active');
   }
 }
 
