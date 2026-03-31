@@ -711,13 +711,8 @@
 
     /* Tool row: scrollable on mobile */
     #tool-row {
-      overflow-x: auto;
-      flex-wrap: nowrap;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding: 6px 0 8px;
+      display: none;
     }
-    #tool-row::-webkit-scrollbar { display: none; }
     .tool-hint { display: none; }
 
     .char-counter { font-size: 11px; white-space: nowrap; }
@@ -1196,10 +1191,6 @@
   <button class="mob-tab" id="tab-preview" onclick="mobileTab('preview')">
     <span class="mob-tab-icon">👁</span>
     Preview
-  </button>
-  <button class="mob-tab" id="tab-output" onclick="mobileTab('output')">
-    <span class="mob-tab-icon">📋</span>
-    Output
   </button>
   <button class="mob-tab" id="tab-color" onclick="mobileTab('color')">
     <span class="mob-tab-icon">🎨</span>
