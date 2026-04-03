@@ -185,9 +185,10 @@
   }
   .plan-btn:hover { border-color: var(--brand); color: var(--text-normal); }
   .plan-btn.selected-standard { background: var(--brand); border-color: var(--brand); color: #fff; }
-  .plan-btn.selected-nitro { background: transparent; border: 1.5px solid transparent; background-clip: padding-box; position: relative; color: #fff; }
-  .plan-btn.selected-nitro::before { content: ''; position: absolute; inset: -1.5px; border-radius: 21px; background: var(--nitro-grad); z-index: -1; }
+  .plan-btn.selected-nitro { background: var(--nitro-grad); border-color: transparent; color: #fff; }
   .char-counter { margin-left: auto; font-size: 12px; color: var(--text-muted); font-family: 'Fira Code', monospace; }
+  .clear-editor-btn { background: var(--bg-modifier) !important; border: 1px solid var(--border) !important; color: var(--text-muted) !important; transition: all 0.15s !important; }
+  .clear-editor-btn:hover { border-color: var(--red) !important; color: var(--red) !important; background: rgba(242,63,67,0.08) !important; }
   .char-counter .count { color: var(--text-normal); font-weight: 600; }
   .char-counter .over { color: var(--red); }
 
@@ -1048,6 +1049,7 @@
     <span class="plan-label">Plan:</span>
     <button class="plan-btn selected-standard" id="btn-standard" onclick="setPlan('standard')">Standard Discord</button>
     <button class="plan-btn" id="btn-nitro" onclick="setPlan('nitro')">✦ Discord Nitro</button>
+    <button class="plan-btn clear-editor-btn" id="btn-clear" onclick="clearEditor()" title="Clear all text in the editor">✕ Clear</button>
     <div class="char-counter">
       <span class="count" id="char-count">0</span><span> / </span>
       <span class="count" id="char-limit">2000</span><span> chars · </span>
@@ -1247,7 +1249,20 @@ function setPlan(p) {
   document.getElementById('btn-nitro').className    = 'plan-btn' + (p === 'nitro'    ? ' selected-nitro'    : '');
   planBadge.className   = 'badge ' + (p === 'nitro' ? 'badge-nitro' : 'badge-standard');
   planBadge.textContent = p === 'nitro' ? '✦ Nitro · 4000 chars' : 'Standard · 2000 chars';
+  // Persist plan selection
+  try { localStorage.setItem('d1_plan', p); } catch(e) {}
   update();
+}
+
+// ================================================================
+// CLEAR EDITOR
+// ================================================================
+function clearEditor() {
+  if (editor.value && !confirm('Clear all text in the editor?')) return;
+  editor.value = '';
+  try { localStorage.removeItem('d1_editor_text'); } catch(e) {}
+  update();
+  editor.focus();
 }
 
 // ================================================================
@@ -1531,7 +1546,11 @@ function copyAnsiBlock() {
 // ================================================================
 // EVENTS
 // ================================================================
-editor.addEventListener('input', update);
+editor.addEventListener('input', () => {
+  update();
+  // Auto-save editor text
+  try { localStorage.setItem('d1_editor_text', editor.value); } catch(e) {}
+});
 editor.addEventListener('keydown', e => {
   if (e.key === 'Tab') {
     e.preventDefault();
@@ -1539,11 +1558,25 @@ editor.addEventListener('keydown', e => {
     editor.value = editor.value.slice(0, start) + '  ' + editor.value.slice(end);
     editor.setSelectionRange(start + 2, start + 2);
     update();
+    try { localStorage.setItem('d1_editor_text', editor.value); } catch(e) {}
   }
 });
 
-// Init
-update();
+// Restore saved editor text and plan on load
+(function restoreSession() {
+  try {
+    const savedText = localStorage.getItem('d1_editor_text');
+    if (savedText) editor.value = savedText;
+    const savedPlan = localStorage.getItem('d1_plan');
+    if (savedPlan === 'nitro' || savedPlan === 'standard') {
+      setPlan(savedPlan);
+    } else {
+      update();
+    }
+  } catch(e) {
+    update();
+  }
+})();
 
 // ================================================================
 // THEME SWITCHER
